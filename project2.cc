@@ -7,20 +7,36 @@
 
 using namespace std;
 
+//declaring parser class for parsing the grammar
 class Parser {
+
+// declaring private memebrs of parser class
 private:
+
+    //declaring lexer object and token object
     LexicalAnalyzer lexer;
     Token token;
 
+    //error functrion which is used to print the syntax error command and stop the program
     void syntax_error() {
+
+        //print the syntax error message
         cout << "SYNTAX ERROR !!!!!!!!!!!!!!\n";
+
+        //stoping the program
         exit(1);
     }
 
-    // This helper consumes the next token and checks its type.
-    void expect(TokenType expected) {
+    //function which will consumes the current token and checks if the token type is correct
+    void expect(TokenType expectedToken) {
+
+        //initializing the token object with the current token
         token = lexer.GetToken();
-        if (token.token_type != expected) {
+
+        //checking if the token type is correct, then don't do anything. else call the syntax error function
+        if (token.token_type != expectedToken) {
+
+            //calling the syntax error function because token type is not matching the expetcted
             syntax_error();
         }
     }
@@ -37,78 +53,116 @@ private:
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
     void parseRightHandSide();
 
-    // Id-list -> ID Id-list | ε
+    // Id-list -> ID Id-list | epsilon
     void parseIdList();
 
 public:
+    //constructor of the parser class
     void startParsing();
 };
 
 // Grammar -> Rule-list HASH
 void Parser::parseGrammar() {
+
+    //parse the rule-list
     parseRuleList();
+
+    //consume the HASH token using expect function
     expect(HASH);
 }
 
 // Rule-list -> Rule Rule-list | Rule
 void Parser::parseRuleList() {
 
-    // The grammar requires at least one Rule
+    //CFG grammar has at least one Rule, so parsing the Rule
     parseRule();
 
-    // After parsing one Rule, we may have more Rules
-    // as long as the next token is an ID
+    //seeing the next toekn after parsing the Rule
     Token nextToken = lexer.peek(1);
+
+    //after parsing one Rule, we might or might not have more Rules. so I check if the 1st token of Rule which is ID is present,
+    //then it means that we have more Rules to parse, so I call the parseRule function again inside the while loop
     while (nextToken.token_type == ID) {
+
+        //parse the Rule
         parseRule();
+
+        //seeing the next token after parsing the Rule, if it is ID then I can continue the loop and parse the next rule
+        //if not then the loop will end.
         nextToken = lexer.peek(1);
     }
 }
 
 // Rule -> ID ARROW Right-hand-side STAR
 void Parser::parseRule() {
-    // LHS must be an ID
+
+    //LHS must be ID based on the CFG grammar. so consume the ID token using expect function
     expect(ID);
-    // Then '->'
+
+    //consume the ARROW token using expect function
     expect(ARROW);
-    // Then parse the right-hand side
+
+    //now RHS starts, parse the right-hand side
     parseRightHandSide();
-    // Then expect a '*'
+
+    //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
 }
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-//right-hand side which is one or more Id-list’s separated with OR’ s
+//right-hand side is one or more Id-list’s separated with OR’s
 void Parser::parseRightHandSide() {
-    // Parse the first Id-list
+
+    //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
     parseIdList();
 
-    // If next token is '|', consume it and parse more Id-list
+
+    //seeing the next toekn after parsing the Rule
     Token nextToken = lexer.peek(1);
+
+    // If next token is '|', consume it and parse more Id-list
+    //after parsing 1st IdList, we might or might not have more IdList. so I check if the next token after IdList is OR is present,
+    //then it means that we have more IdList to parse, so I call the parseIdList function again inside the while loop
     while (nextToken.token_type == OR) {
+
+        //consume the OR token using expect function after parsing the 1st IdList
         expect(OR);
+
+        //parse the next Id-list
         parseIdList();
+
+        //seeing the next token after parsing the IdList, if it is OR then I can continue the loop and parse the next IdList
+        //if not then the loop will end.
         nextToken = lexer.peek(1);
     }
 }
 
-// Id-list -> ID Id-list | ε
+// Id-list -> ID Id-list | epsilon
 //Id-list is a list of zero or more ID’s
 void Parser::parseIdList() {
-    // If the next token is an ID, consume it and parse another Id-list
-    // Otherwise, we do nothing (ε)
 
+    //seeing the next token
     Token nextToken = lexer.peek(1);
+
+    //checking if the next token is an ID, consume it and parse another Id-list
+    //if the next toek is not ID, meaning epsilon, then I do nothing (epsilon) and the while loop ends
     if (nextToken.token_type == ID) {
+
+        //consume the ID token using expect function, because every Id-list starts with ID
         expect(ID);
-        // Recursively parse the remainder of the Id-list
+
+        //parse the Id-list which is present for sure
         parseIdList();
+
     }
-    // If it's not an ID, we take ε, which means "do nothing"
+
+    //if the next toek is not ID, meaning epsilon, then I do nothing (epsilon) and exit the function
 }
 
-// This function is your public "entry point" for parsing.
+//declaring the public function which will start the parsing of grammar
 void Parser::startParsing() {
+
+    //parse the grammar
     parseGrammar();
 }
 
@@ -172,8 +226,10 @@ int main (int argc, char* argv[])
 
     task = atoi(argv[1]);
 
-
+    //declaring the parser object
     Parser parser;
+
+    //starting the parsing of the grammar
     parser.startParsing();
     
     //ReadGrammar();  // Reads the input grammar from standard input
