@@ -3,4 +3,6 @@ project(project2)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(project2 ztrail.cpp)
+set(CMAKE_BUILD_TYPE Debug)
+
+add_executable(project2 project2.cc lexer.cc inputbuf.cc)
