@@ -78,6 +78,7 @@ void Parser::parseRule() {
 }
 
 // Right-hand-side → Id-list | Id-list OR Right-hand-side
+//right-hand side which is one or more Id-list’s separated with OR’ s
 void Parser::parseRightHandSide() {
     // Parse the first Id-list
     parseIdList();
@@ -85,16 +86,18 @@ void Parser::parseRightHandSide() {
     // If next token is '|', consume it and parse more Id-list
     Token nextToken = lexer.peek(1);
     while (nextToken.token_type == OR) {
-        lexer.GetToken(); // consume '|'
+        expect(OR);
         parseIdList();
         nextToken = lexer.peek(1);
     }
 }
 
 // Id-list → ID Id-list | ε
+//Id-list is a list of zero or more ID’s
 void Parser::parseIdList() {
     // If the next token is an ID, consume it and parse another Id-list
     // Otherwise, we do nothing (ε)
+
     Token nextToken = lexer.peek(1);
     if (nextToken.token_type == ID) {
         expect(ID);
