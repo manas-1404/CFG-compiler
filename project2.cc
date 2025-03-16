@@ -25,32 +25,32 @@ private:
         }
     }
 
-    // Grammar → Rule-list HASH
+    // Grammar -> Rule-list HASH
     void parseGrammar();
 
-    // Rule-list → Rule Rule-list | Rule
+    // Rule-list -> Rule Rule-list | Rule
     void parseRuleList();
 
-    // Rule → ID ARROW Right-hand-side STAR
+    // Rule -> ID ARROW Right-hand-side STAR
     void parseRule();
 
-    // Right-hand-side → Id-list | Id-list OR Right-hand-side
+    // Right-hand-side -> Id-list | Id-list OR Right-hand-side
     void parseRightHandSide();
 
-    // Id-list → ID Id-list | ε
+    // Id-list -> ID Id-list | ε
     void parseIdList();
 
 public:
     void startParsing();
 };
 
-// Grammar → Rule-list HASH
+// Grammar -> Rule-list HASH
 void Parser::parseGrammar() {
     parseRuleList();
     expect(HASH);
 }
 
-// Rule-list → Rule Rule-list | Rule
+// Rule-list -> Rule Rule-list | Rule
 void Parser::parseRuleList() {
 
     // The grammar requires at least one Rule
@@ -65,7 +65,7 @@ void Parser::parseRuleList() {
     }
 }
 
-// Rule → ID ARROW Right-hand-side STAR
+// Rule -> ID ARROW Right-hand-side STAR
 void Parser::parseRule() {
     // LHS must be an ID
     expect(ID);
@@ -77,7 +77,7 @@ void Parser::parseRule() {
     expect(STAR);
 }
 
-// Right-hand-side → Id-list | Id-list OR Right-hand-side
+// Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side which is one or more Id-list’s separated with OR’ s
 void Parser::parseRightHandSide() {
     // Parse the first Id-list
@@ -92,7 +92,7 @@ void Parser::parseRightHandSide() {
     }
 }
 
-// Id-list → ID Id-list | ε
+// Id-list -> ID Id-list | ε
 //Id-list is a list of zero or more ID’s
 void Parser::parseIdList() {
     // If the next token is an ID, consume it and parse another Id-list
