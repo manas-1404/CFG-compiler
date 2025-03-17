@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <unordered_set>
 #include "lexer.h"
 
 using namespace std;
@@ -14,6 +15,11 @@ struct Rule {
 };
 
 vector<Rule> allRules;
+
+set<string> nonTerminalsSet;
+set<string> terminalsSet;
+
+vector<string> universe;
 
 //declaring parser class for parsing the grammar
 class Parser {
@@ -111,6 +117,7 @@ void Parser::parseRule() {
     //LHS must be ID based on the CFG grammar. so consume the ID token using expect function
     Token lhsToken = expect(ID);
     newRule.LHS = lhsToken.lexeme;
+    universe.push_back(lhsToken.lexeme);
 
     //consume the ARROW token using expect function
     expect(ARROW);
@@ -166,6 +173,7 @@ void Parser::parseIdList(vector<string> &rhsSymbols) {
         //consume the ID token using expect function, because every Id-list starts with ID
         Token rightSideToken = expect(ID);
         rhsSymbols.push_back(rightSideToken.lexeme);
+        universe.push_back(rightSideToken.lexeme);
 
         //parse the Id-list which is present for sure
         parseIdList(rhsSymbols);
@@ -188,6 +196,58 @@ void ReadGrammar() {
 
 }
 
+void removeDuplicates(vector<string>& vec) {
+    unordered_set<string> seen;
+    vector<string> result;
+
+    // Traverse the vector using a for loop with indices
+    for (size_t i = 0; i < vec.size(); ++i) {
+
+        // If the element is not in the set, add it to the result and mark it as seen
+        if (seen.find(vec[i]) == seen.end()) {
+            result.push_back(vec[i]);
+            seen.insert(vec[i]);
+        }
+    }
+
+    vec = result;
+}
+
+
+bool isNonTerminal(const string &symbol) {
+    return nonTerminalsSet.find(symbol) != nonTerminalsSet.end();
+}
+
+void getNonTerminals() {
+    for (auto &rule : allRules) {
+        nonTerminalsSet.insert(rule.LHS);
+    }
+}
+
+void getTerminals() {
+    for (auto &rule : allRules) {
+        for (auto &symbol : rule.RHS) {
+            if (!isNonTerminal(symbol)) {
+                terminalsSet.insert(symbol);
+            }
+        }
+    }
+}
+
+void printSetUniverseOrder(set<string> s)
+{
+    bool first = true;
+
+    // in which they appear in the universe
+    for (const string &word : universe) {
+        if (s.find(word) != s.end()) {
+            if (!first) cout << " ";
+            cout << word;
+            first = false;
+        }
+    }
+}
+
 /* 
  * Task 1: 
  * Printing the terminals, then nonterminals of grammar in appearing order
@@ -195,6 +255,11 @@ void ReadGrammar() {
 */
 void Task1()
 {
+    getNonTerminals();
+    getTerminals();
+
+    printSetUniverseOrder(terminalsSet);
+    printSetUniverseOrder(nonTerminalsSet);
 }
 
 /*
@@ -252,9 +317,13 @@ int main (int argc, char* argv[])
                     // and represent it internally in data structures
                     // ad described in project 2 presentation file
 
+    removeDuplicates(universe);
+
     switch (task) {
-        case 1: Task1();
-            cout << "Hello world from task1" << endl;
+        case 1:
+            Task1();
+            cout << endl;
+            // cout << "Hello world from task1" << endl;
             break;
 
         case 2: Task2();
