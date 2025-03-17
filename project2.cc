@@ -18,6 +18,7 @@ vector<Rule> allRules;
 
 set<string> nonTerminalsSet;
 set<string> terminalsSet;
+set<string> nullableSet;
 
 vector<string> universe;
 
@@ -248,6 +249,58 @@ void printSetUniverseOrder(set<string> s)
     }
 }
 
+void printNullableSetUniverseOrder(set<string> s)
+{
+    bool first = true;
+
+    // in which they appear in the universe
+    for (const string &word : universe) {
+        if (s.find(word) != s.end()) {
+            if (!first) cout << " , ";
+            cout << word;
+            first = false;
+        }
+    }
+}
+
+void calculateNullableNonTerminals() {
+    bool changed = true;
+
+    while (changed) {
+        changed = false;
+
+        for (auto &rule : allRules) {
+            const string &lhs = rule.LHS;
+
+
+            if (nullableSet.find(lhs) == nullableSet.end()) {
+
+                bool allNullable = true;
+
+
+                if (rule.RHS.empty()) {
+                    allNullable = true;
+                } else {
+
+                    for (auto &symbol : rule.RHS) {
+
+                        if (terminalsSet.find(symbol) != terminalsSet.end() || nullableSet.find(symbol) == nullableSet.end()) {
+                            allNullable = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (allNullable) {
+                    nullableSet.insert(lhs);
+                    changed = true;
+                }
+            }
+        }
+    }
+}
+
+
 /* 
  * Task 1: 
  * Printing the terminals, then nonterminals of grammar in appearing order
@@ -268,6 +321,12 @@ void Task1()
 */
 void Task2()
 {
+
+    calculateNullableNonTerminals();
+
+    cout << "Nullable = {";
+    printNullableSetUniverseOrder(nullableSet);
+    cout << "}";
 }
 
 // Task 3: FIRST sets
@@ -326,7 +385,9 @@ int main (int argc, char* argv[])
             // cout << "Hello world from task1" << endl;
             break;
 
-        case 2: Task2();
+        case 2:
+            Task2();
+            // cout << endl;
             break;
 
         case 3: Task3();
