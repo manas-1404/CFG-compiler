@@ -3,9 +3,17 @@
 #include <cstdlib>
 #include <vector>
 #include <string>
+#include <set>
 #include "lexer.h"
 
 using namespace std;
+
+struct Rule {
+    string LHS;
+    vector<string> RHS;
+};
+
+vector<Rule> allRules;
 
 //declaring parser class for parsing the grammar
 class Parser {
@@ -28,17 +36,19 @@ private:
     }
 
     //function which will consumes the current token and checks if the token type is correct
-    void expect(TokenType expectedToken) {
+    Token expect(TokenType expectedToken) {
 
         //initializing the token object with the current token
-        token = lexer.GetToken();
+        Token t = lexer.GetToken();
 
         //checking if the token type is correct, then don't do anything. else call the syntax error function
-        if (token.token_type != expectedToken) {
+        if (t.token_type != expectedToken) {
 
             //calling the syntax error function because token type is not matching the expetcted
             syntax_error();
         }
+
+        return t;
     }
 
     // Grammar -> Rule-list HASH
@@ -51,10 +61,10 @@ private:
     void parseRule();
 
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-    void parseRightHandSide();
+    void parseRightHandSide(vector<string> &rhsSymbols);
 
     // Id-list -> ID Id-list | epsilon
-    void parseIdList();
+    void parseIdList(vector<string> &rhsSymbols);
 
 public:
     //constructor of the parser class
@@ -96,25 +106,30 @@ void Parser::parseRuleList() {
 // Rule -> ID ARROW Right-hand-side STAR
 void Parser::parseRule() {
 
+    Rule newRule;
+
     //LHS must be ID based on the CFG grammar. so consume the ID token using expect function
-    expect(ID);
+    Token lhsToken = expect(ID);
+    newRule.LHS = lhsToken.lexeme;
 
     //consume the ARROW token using expect function
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
-    parseRightHandSide();
+    parseRightHandSide(newRule.RHS);
 
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
+
+    allRules.push_back(newRule);
 }
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
-void Parser::parseRightHandSide() {
+void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
 
     //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
-    parseIdList();
+    parseIdList(rhsSymbols);
 
 
     //seeing the next toekn after parsing the Rule
@@ -129,7 +144,7 @@ void Parser::parseRightHandSide() {
         expect(OR);
 
         //parse the next Id-list
-        parseIdList();
+        parseIdList(rhsSymbols);
 
         //seeing the next token after parsing the IdList, if it is OR then I can continue the loop and parse the next IdList
         //if not then the loop will end.
@@ -139,7 +154,7 @@ void Parser::parseRightHandSide() {
 
 // Id-list -> ID Id-list | epsilon
 //Id-list is a list of zero or more ID’s
-void Parser::parseIdList() {
+void Parser::parseIdList(vector<string> &rhsSymbols) {
 
     //seeing the next token
     Token nextToken = lexer.peek(1);
@@ -149,10 +164,11 @@ void Parser::parseIdList() {
     if (nextToken.token_type == ID) {
 
         //consume the ID token using expect function, because every Id-list starts with ID
-        expect(ID);
+        Token rightSideToken = expect(ID);
+        rhsSymbols.push_back(rightSideToken.lexeme);
 
         //parse the Id-list which is present for sure
-        parseIdList();
+        parseIdList(rhsSymbols);
 
     }
 
