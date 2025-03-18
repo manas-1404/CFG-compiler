@@ -158,7 +158,9 @@ void Parser::parseRule() {
     newRule.LHS = lhsToken.lexeme;
     universe.push_back(lhsToken.lexeme);
 
+    cout << "\nPrinting IN-PROGRESS Rule so far\n";
     cout << "-------> LHS: " << newRule.LHS << endl;
+    printAllRules();
 
     //consume the ARROW token using expect function
     expect(ARROW);
@@ -171,6 +173,7 @@ void Parser::parseRule() {
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
 
+    cout << "\nPrinting COMPLETE Rule so far\n";
     allRules.push_back(newRule);
 
     printAllRules();
