@@ -68,7 +68,7 @@ private:
     void parseRule();
 
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-    void parseRightHandSide(vector<string> &rhsSymbols);
+    void parseRightHandSide(string currentLHS, vector<string> &rhsSymbols);
 
     // Id-list -> ID Id-list | epsilon
     void parseIdList(vector<string> &rhsSymbols);
@@ -117,14 +117,15 @@ void Parser::parseRule() {
 
     //LHS must be ID based on the CFG grammar. so consume the ID token using expect function
     Token lhsToken = expect(ID);
-    newRule.LHS = lhsToken.lexeme;
-    universe.push_back(lhsToken.lexeme);
+    string currentLHS = lhsToken.lexeme;
+    newRule.LHS = currentLHS;
+    universe.push_back(currentLHS);
 
     //consume the ARROW token using expect function
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
-    parseRightHandSide(newRule.RHS);
+    parseRightHandSide(currentLHS, newRule.RHS);
 
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
@@ -134,7 +135,7 @@ void Parser::parseRule() {
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
-void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
+void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
 
     //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
     parseIdList(rhsSymbols);
@@ -151,8 +152,25 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
         //consume the OR token using expect function after parsing the 1st IdList
         expect(OR);
 
-        //parse the next Id-list
-        parseIdList(rhsSymbols);
+        Token maybeStar = lexer.peek(1);
+
+        if (maybeStar.token_type == STAR) {
+            // if the alternative is epsilon (no symbols)
+            // Do nothing, just continue after OR
+
+            Rule epsilonRule;
+
+            epsilonRule.LHS = currentLHS;
+            epsilonRule.RHS = {};
+
+            allRules.push_back(epsilonRule);
+        } else {
+
+            // parse the next Id-list
+            parseIdList(rhsSymbols);
+
+        }
+
 
         //seeing the next token after parsing the IdList, if it is OR then I can continue the loop and parse the next IdList
         //if not then the loop will end.
