@@ -383,7 +383,7 @@ void printFirstSets() {
     for (int i = 0; i < (int)universe.size(); i++) {
         string nonTerminal = universe[i];
 
-        // Only print for non-terminals
+        //only printing for non-terminals
         if (nonTerminalsSet.find(nonTerminal) != nonTerminalsSet.end()) {
             cout << "FIRST(" << nonTerminal << ") = { ";
 
@@ -492,9 +492,6 @@ void calculateFirstSets() {
 */
 void Task1()
 {
-    getNonTerminals();
-    getTerminals();
-
     printSetUniverseOrder(terminalsSet);
     printSetUniverseOrder(nonTerminalsSet);
 }
@@ -505,9 +502,6 @@ void Task1()
 */
 void Task2()
 {
-
-    calculateNullableNonTerminals();
-
     cout << "Nullable = {";
     printNullableSetUniverseOrder(nullableSet);
     cout << "}";
@@ -516,7 +510,6 @@ void Task2()
 // Task 3: FIRST sets
 void Task3()
 {
-    calculateFirstSets();
     printFirstSets();
 }
 
@@ -564,6 +557,13 @@ int main (int argc, char* argv[])
 
     removeDuplicates(universe);
 
+    //start calculating all the important sets right now and store them in the global sets
+    getNonTerminals();
+    getTerminals();
+
+    calculateNullableNonTerminals();
+    calculateFirstSets();
+
     switch (task) {
         case 1:
             Task1();
@@ -573,7 +573,6 @@ int main (int argc, char* argv[])
 
         case 2:
             Task2();
-            // cout << endl;
             break;
 
         case 3:
