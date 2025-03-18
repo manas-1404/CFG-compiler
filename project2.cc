@@ -161,6 +161,7 @@ void Parser::parseRule() {
     cout << "\nPrinting IN-PROGRESS Rule so far\n";
     cout << "-------> LHS: " << newRule.LHS << endl;
     printAllRules();
+    cout << "END of Printing IN-PROGRESS Rule so far\n";
 
     //consume the ARROW token using expect function
     expect(ARROW);
