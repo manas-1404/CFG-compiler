@@ -5,6 +5,7 @@
 #include <string>
 #include <set>
 #include <unordered_set>
+#include <map>
 #include "lexer.h"
 
 using namespace std;
@@ -19,6 +20,8 @@ vector<Rule> allRules;
 set<string> nonTerminalsSet;
 set<string> terminalsSet;
 set<string> nullableSet;
+
+map<string, set<string>> firstsSetHashMap;
 
 vector<string> universe;
 
@@ -376,6 +379,111 @@ void calculateNullableNonTerminals() {
     }
 }
 
+void printFirstSets() {
+    for (int i = 0; i < (int)universe.size(); i++) {
+        string nonTerminal = universe[i];
+
+        // Only print for non-terminals
+        if (nonTerminalsSet.find(nonTerminal) != nonTerminalsSet.end()) {
+            cout << "FIRST(" << nonTerminal << ") = { ";
+
+            bool first = true;
+            for (int j = 0; j < (int)universe.size(); j++) {
+                string symbol = universe[j];
+
+                if (firstsSetHashMap[nonTerminal].find(symbol) != firstsSetHashMap[nonTerminal].end()) {
+                    if (!first) cout << ", ";
+                    cout << symbol;
+                    first = false;
+                }
+            }
+            cout << " }" << endl;
+        }
+    }
+}
+
+
+void calculateFirstSets() {
+    //initialize each non-terminal's FIRST set to be empty
+    for (auto &nt : nonTerminalsSet) {
+        firstsSetHashMap[nt].clear();
+    }
+
+
+    bool changed = true;
+    while (changed) {
+        changed = false;
+
+        //Going through each rule A -> α in allRules
+        for (int i = 0; i < (int)allRules.size(); i++) {
+            // Example: A -> X Y Z
+            string A = allRules[i].LHS;
+            vector<string> alpha = allRules[i].RHS;
+
+            //If alpha is empty, then add "epsilon" to FIRST(A)
+            if (alpha.empty()) {
+                if (firstsSetHashMap[A].find("epsilon") == firstsSetHashMap[A].end()) {
+                    firstsSetHashMap[A].insert("epsilon");
+                    changed = true;
+                }
+
+                //done with this rule, so skip any future processin in this iteration
+                continue;
+            }
+
+            //processing alpha from left to right
+            bool allNullable = true;
+            for (int j = 0; j < (int)alpha.size(); j++) {
+                string symbol = alpha[j];
+
+                //if symbol is a terminal, then add symbol to FIRST(A) and stop
+                if (terminalsSet.find(symbol) != terminalsSet.end()) {
+
+                    //inserting terminal
+                    if (firstsSetHashMap[A].find(symbol) == firstsSetHashMap[A].end()) {
+                        firstsSetHashMap[A].insert(symbol);
+                        changed = true;
+                    }
+
+                    allNullable = false;
+                    break;
+                } else {
+
+                    //if the symbol is a non-terminal, union its FIRST set minus epsilon into FIRST(A)
+                    int oldSize = (int)firstsSetHashMap[A].size();
+
+                    //inserting FIRST(symbol) - "epsilon" into FIRST(A)
+                    for (auto &sym : firstsSetHashMap[symbol]) {
+                        if (sym != "epsilon") {
+                            firstsSetHashMap[A].insert(sym);
+                        }
+                    }
+
+                    //if FIRST(A) becomes big, then mark changed
+                    if ((int)firstsSetHashMap[A].size() > oldSize) {
+                        changed = true;
+                    }
+
+                    //if symbol is not nullable, stop
+                    if (nullableSet.find(symbol) == nullableSet.end()) {
+                        allNullable = false;
+                        break;
+                    }
+                    //else keep it goinggg
+                }
+            }
+
+            //if it never "broke out", then all symbols in alpha are nullable and add epsilon
+            if (allNullable) {
+                if (firstsSetHashMap[A].find("epsilon") == firstsSetHashMap[A].end()) {
+                    firstsSetHashMap[A].insert("epsilon");
+                    changed = true;
+                }
+            }
+        }
+    }
+}
+
 
 /* 
  * Task 1: 
@@ -408,6 +516,8 @@ void Task2()
 // Task 3: FIRST sets
 void Task3()
 {
+    calculateFirstSets();
+    printFirstSets();
 }
 
 // Task 4: FOLLOW sets
@@ -466,7 +576,8 @@ int main (int argc, char* argv[])
             // cout << endl;
             break;
 
-        case 3: Task3();
+        case 3:
+            Task3();
             break;
 
         case 4: Task4();
