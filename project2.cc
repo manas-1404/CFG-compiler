@@ -94,7 +94,7 @@ private:
     void parseRule();
 
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-    void parseRightHandSide(string currentLHS, vector<string> &rhsSymbols);
+    void parseRightHandSide(string currentLHS);
 
     // Id-list -> ID Id-list | epsilon
     void parseIdList(vector<string> &rhsSymbols);
@@ -168,30 +168,47 @@ void Parser::parseRule() {
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
-    parseRightHandSide(currentLHS, newRule.RHS);
+    parseRightHandSide(currentLHS);
 
     cout << "Parsing RHS done in Rule method\n";
 
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
 
-    cout << "\nPrinting COMPLETE Rule so far\n";
-    allRules.push_back(newRule);
-
-    printAllRules();
-
     cout << "FINISHED parsing THE RULE\n";
 }
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
-void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
+void Parser::parseRightHandSide(string currentLHS) {
 
     cout << "STARTING parsing  RIGHT HAND SIDE\n";
 
-    //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
-    parseIdList(rhsSymbols);
+    Token firstToken = lexer.peek(1);
 
+    //edge case: if the first RHS is epsilon only
+    // Check if first RHS is epsilon
+    if (firstToken.token_type == STAR) {
+        // Epsilon rule case
+        Rule epsilonRule;
+        epsilonRule.LHS = currentLHS;
+        epsilonRule.RHS = {};  // Empty RHS
+        allRules.push_back(epsilonRule);
+
+        cout << "HANDLING EPSILON CASE: Added epsilon rule\n";
+        printAllRules();  // Debug print
+        return; // No need to continue parsing
+    }
+
+
+    Rule newEachRule;
+    newEachRule.LHS = currentLHS;
+    //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
+    parseIdList(newEachRule.RHS);
+    allRules.push_back(newEachRule);
+
+    cout << "\nPrinting COMPLETE Rule so far\n";
+    printAllRules();
 
     //seeing the next toekn after parsing the Rule
     Token nextToken = lexer.peek(1);
@@ -228,10 +245,14 @@ void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
 
         } else {
 
+            Rule duplicateRule;
+            duplicateRule.LHS = currentLHS;
+
             cout << "current token is not STAR, so callling  parseIdList from parseRightHandSide()\n";
             // parse the next Id-list
-            parseIdList(rhsSymbols);
+            parseIdList(duplicateRule.RHS);
             cout << "COMPLETED parseIdList from parseRightHandSide()\n";
+            allRules.push_back(duplicateRule);
         }
 
 
