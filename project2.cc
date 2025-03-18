@@ -22,6 +22,32 @@ set<string> nullableSet;
 
 vector<string> universe;
 
+void printAllRules() {
+    for (const auto &rule : allRules) {
+        cout << rule.LHS << " -> ";
+        if (rule.RHS.empty()) {
+            cout << "(empty)";
+        } else {
+            for (const string &symbol : rule.RHS) {
+                cout << symbol << " ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+void printRHSSymbols(const vector<string> &rhsSymbols) {
+    if (rhsSymbols.empty()) {
+        cout << "(empty)";  // Indicate epsilon explicitly
+    } else {
+        for (const string &symbol : rhsSymbols) {
+            cout << symbol << " ";
+        }
+    }
+    cout << endl;
+}
+
+
 //declaring parser class for parsing the grammar
 class Parser {
 
@@ -81,8 +107,12 @@ public:
 // Grammar -> Rule-list HASH
 void Parser::parseGrammar() {
 
+    cout << "STARTING parsing THE GRAMMAR\n";
+
     //parse the rule-list
     parseRuleList();
+
+    cout << "FINISHED parsing THE GRAMMAR\n";
 
     //consume the HASH token using expect function
     expect(HASH);
@@ -90,6 +120,8 @@ void Parser::parseGrammar() {
 
 // Rule-list -> Rule Rule-list | Rule
 void Parser::parseRuleList() {
+
+    cout << "STARTING parsing THE RULE LIST\n";
 
     //CFG grammar has at least one Rule, so parsing the Rule
     parseRule();
@@ -101,6 +133,8 @@ void Parser::parseRuleList() {
     //then it means that we have more Rules to parse, so I call the parseRule function again inside the while loop
     while (nextToken.token_type == ID) {
 
+        cout << "More Rules present, so callinf parseRule() again from parseRuleList()\n";
+
         //parse the Rule
         parseRule();
 
@@ -108,10 +142,14 @@ void Parser::parseRuleList() {
         //if not then the loop will end.
         nextToken = lexer.peek(1);
     }
+
+    cout << "FINISHED parsing THE RULE LIST\n";
 }
 
 // Rule -> ID ARROW Right-hand-side STAR
 void Parser::parseRule() {
+
+    cout << "STARTING parsing THE RULE\n";
 
     Rule newRule;
 
@@ -120,21 +158,31 @@ void Parser::parseRule() {
     newRule.LHS = lhsToken.lexeme;
     universe.push_back(lhsToken.lexeme);
 
+    cout << "-------> LHS: " << newRule.LHS << endl;
+
     //consume the ARROW token using expect function
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
     parseRightHandSide(newRule.RHS);
 
+    cout << "Parsing RHS done in Rule method\n";
+
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
 
     allRules.push_back(newRule);
+
+    printAllRules();
+
+    cout << "FINISHED parsing THE RULE\n";
 }
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
 void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
+
+    cout << "STARTING parsing  RIGHT HAND SIDE\n";
 
     //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
     parseIdList(rhsSymbols);
@@ -151,8 +199,16 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
         //consume the OR token using expect function after parsing the 1st IdList
         expect(OR);
 
-        //parse the next Id-list
-        parseIdList(rhsSymbols);
+        Token maybeStar = lexer.peek(1);
+
+        if (maybeStar.token_type == STAR) {
+            // if the alternative is epsilon (no symbols)
+            // Do nothing, just continue after OR
+        } else {
+            // parse the next Id-list
+            parseIdList(rhsSymbols);
+        }
+
 
         //seeing the next token after parsing the IdList, if it is OR then I can continue the loop and parse the next IdList
         //if not then the loop will end.
@@ -164,6 +220,8 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
 //Id-list is a list of zero or more ID’s
 void Parser::parseIdList(vector<string> &rhsSymbols) {
 
+    cout << "STARTING parsing  ID LIST\n";
+
     //seeing the next token
     Token nextToken = lexer.peek(1);
 
@@ -171,10 +229,19 @@ void Parser::parseIdList(vector<string> &rhsSymbols) {
     //if the next toek is not ID, meaning epsilon, then I do nothing (epsilon) and the while loop ends
     if (nextToken.token_type == ID) {
 
+        cout << "Another Id-list present, so parsing the Id-List from parseIdList() using parseIdList()\n";
+
         //consume the ID token using expect function, because every Id-list starts with ID
         Token rightSideToken = expect(ID);
         rhsSymbols.push_back(rightSideToken.lexeme);
         universe.push_back(rightSideToken.lexeme);
+
+        cout << "Inside parseIDList(), printing rhsSymbols -------> RHS: ";
+        printRHSSymbols(rhsSymbols);
+
+        cout << "Inside parseIDList(), printing universe -------> RHS: ";
+        printRHSSymbols(universe);
+
 
         //parse the Id-list which is present for sure
         parseIdList(rhsSymbols);
@@ -324,9 +391,9 @@ void Task2()
 
     calculateNullableNonTerminals();
 
-    cout << "Nullable = {";
+    cout << "Nullable = { ";
     printNullableSetUniverseOrder(nullableSet);
-    cout << "}";
+    cout << " }";
 }
 
 // Task 3: FIRST sets
@@ -387,7 +454,7 @@ int main (int argc, char* argv[])
 
         case 2:
             Task2();
-            // cout << endl;
+            cout << endl;
             break;
 
         case 3: Task3();
