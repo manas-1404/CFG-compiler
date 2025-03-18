@@ -24,8 +24,6 @@ set<string> nullableSet;
 map<string, set<string>> firstsSetHashMap;
 map<string, set<string>> followsSetHashMap;
 
-string startSymbol;
-
 vector<string> universe;
 
 //declaring parser class for parsing the grammar
@@ -501,8 +499,10 @@ bool unionInsert(set<string> &dest, const set<string> &src) {
 }
 
 void calculateFollowSets() {
-    //addding $ to FOLLOW(startSymbol)
-    followsSetHashMap[startSymbol].insert("$");
+
+    if (!universe.empty()) {
+        followsSetHashMap[universe[0]].insert("$");
+    }
 
     bool changed = true;
     while (changed) {
