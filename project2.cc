@@ -68,7 +68,7 @@ private:
     void parseRule();
 
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-    void parseRightHandSide(string currentLHS, vector<string> &rhsSymbols);
+    void parseRightHandSide(string currentLHS);
 
     // Id-list -> ID Id-list | epsilon
     void parseIdList(vector<string> &rhsSymbols);
@@ -125,20 +125,40 @@ void Parser::parseRule() {
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
-    parseRightHandSide(currentLHS, newRule.RHS);
+    parseRightHandSide(currentLHS);
 
     //consume the STAR token using expect function, because every rule ends with STAR token
     expect(STAR);
 
-    allRules.push_back(newRule);
 }
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
-void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
+void Parser::parseRightHandSide(string currentLHS) {
+
+    Token firstToken = lexer.peek(1);
+
+    //edge case: if the first RHS is epsilon only
+    //what if while parsing the rule, A -> * , is present, here RHS = *, then i will only need to add the empty rule and move ahead
+    if (firstToken.token_type == STAR) {
+
+        //adding epsilon rule case
+        Rule epsilonRule;
+        epsilonRule.LHS = currentLHS;
+        epsilonRule.RHS = {};
+        allRules.push_back(epsilonRule);
+
+        //you dont have to continue parsing because the rule has ended
+        return;
+    }
+
+
+    Rule newEachRule;
+    newEachRule.LHS = currentLHS;
 
     //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
-    parseIdList(rhsSymbols);
+    parseIdList(newEachRule.RHS);
+    allRules.push_back(newEachRule);
 
 
     //seeing the next toekn after parsing the Rule
@@ -166,9 +186,13 @@ void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
             allRules.push_back(epsilonRule);
         } else {
 
-            // parse the next Id-list
-            parseIdList(rhsSymbols);
+            Rule duplicateRule;
+            duplicateRule.LHS = currentLHS;
 
+            // parse the next Id-list
+            parseIdList(duplicateRule.RHS);
+
+            allRules.push_back(duplicateRule);
         }
 
 
