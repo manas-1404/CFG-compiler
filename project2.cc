@@ -22,6 +22,9 @@ set<string> terminalsSet;
 set<string> nullableSet;
 
 map<string, set<string>> firstsSetHashMap;
+map<string, set<string>> followsSetHashMap;
+
+string startSymbol;
 
 vector<string> universe;
 
@@ -485,6 +488,116 @@ void calculateFirstSets() {
 }
 
 
+
+bool unionInsert(set<string> &dest, const set<string> &src) {
+    bool changed = false;
+    for (auto &x : src) {
+        if (dest.find(x) == dest.end()) {
+            dest.insert(x);
+            changed = true;
+        }
+    }
+    return changed;
+}
+
+void calculateFollowSets() {
+    //addding $ to FOLLOW(startSymbol)
+    followsSetHashMap[startSymbol].insert("$");
+
+    bool changed = true;
+    while (changed) {
+        changed = false;
+
+        //for each and every rule A -> α
+        for (auto &rule : allRules) {
+            string lhs = rule.LHS;
+            vector<string> rhs = rule.RHS;
+
+            //keeping trailer set
+            //Initially = FOLLOW(A)
+            set<string> trailer = followsSetHashMap[lhs];
+
+            //traversing through RHS from right to left
+            for (int i = rhs.size() - 1; i >= 0; i--) {
+                string currSym = rhs[i];
+
+                //if currSym is a non-terminal
+                if (nonTerminalsSet.find(currSym) != nonTerminalsSet.end()) {
+
+                    //adding trailer to FOLLOW(currSym)
+                    int beforeSize = followsSetHashMap[currSym].size();
+                    followsSetHashMap[currSym].insert(trailer.begin(), trailer.end());
+
+                    if (followsSetHashMap[currSym].size() > beforeSize) {
+                        changed = true;
+                    }
+
+                    //if FIRST(currSym) has epsilon, then trailer union =FIRST(currSym) - {epsilon}
+                    //else trailer = FIRST(currSym) - epsilon
+                    if (firstsSetHashMap[currSym].find("epsilon") != firstsSetHashMap[currSym].end()) {
+                        // therefore currSym can vanish =>
+                        // so union FIRST(currSym) minus epsilon goes into trailer
+                        for (auto &x : firstsSetHashMap[currSym]) {
+                            if (x != "epsilon") {
+                                trailer.insert(x);
+                            }
+                        }
+                    } else {
+                        //symbol cannot vanish, so trailer = FIRST(currSym) minus epsilon
+                        set<string> newTrailer;
+                        for (auto &x : firstsSetHashMap[currSym]) {
+                            if (x != "epsilon") {
+                                newTrailer.insert(x);
+                            }
+                        }
+                        trailer = newTrailer;
+                    }
+                }
+                //if currSym is a terminal
+                else {
+
+                    trailer.clear();
+                    trailer.insert(currSym);
+                }
+            }
+        }
+    }
+}
+
+
+void printFollowSets() {
+    for (int i = 0; i < (int)universe.size(); i++) {
+        string nonTerminal = universe[i];
+
+        //printing only for non-terminals
+        if (nonTerminalsSet.find(nonTerminal) != nonTerminalsSet.end()) {
+            cout << "FOLLOW(" << nonTerminal << ") = { ";
+
+            bool first = true;
+
+            //$ aklways appears first if it's in the FOLLOW set
+            if (followsSetHashMap[nonTerminal].find("$") != followsSetHashMap[nonTerminal].end()) {
+                cout << "$";
+                first = false;
+            }
+
+            //printing elements in the order they appear in the sorted universe
+            for (int j = 0; j < (int)universe.size(); j++) {
+                string symbol = universe[j];
+
+                if (symbol != "$" && followsSetHashMap[nonTerminal].find(symbol) != followsSetHashMap[nonTerminal].end()) {
+                    if (!first) cout << ", ";
+                    cout << symbol;
+                    first = false;
+                }
+            }
+
+            cout << " }" << endl;
+        }
+    }
+}
+
+
 /* 
  * Task 1: 
  * Printing the terminals, then nonterminals of grammar in appearing order
@@ -516,6 +629,7 @@ void Task3()
 // Task 4: FOLLOW sets
 void Task4()
 {
+    printFollowSets();
 }
 
 // Task 5: left factoring
@@ -563,6 +677,7 @@ int main (int argc, char* argv[])
 
     calculateNullableNonTerminals();
     calculateFirstSets();
+    calculateFollowSets();
 
     switch (task) {
         case 1:
@@ -579,7 +694,8 @@ int main (int argc, char* argv[])
             Task3();
             break;
 
-        case 4: Task4();
+        case 4:
+            Task4();
             break;
 
         case 5: Task5();
