@@ -200,6 +200,8 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
     //then it means that we have more IdList to parse, so I call the parseIdList function again inside the while loop
     while (nextToken.token_type == OR) {
 
+        cout << "More ID-Lists are present, OR is present, so parsing the next Id-List\n";
+
         //consume the OR token using expect function after parsing the 1st IdList
         expect(OR);
 
@@ -208,9 +210,15 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
         if (maybeStar.token_type == STAR) {
             // if the alternative is epsilon (no symbols)
             // Do nothing, just continue after OR
+
+            cout << "current token is STAR, so not parsing the next Id-List\n";
+
         } else {
+
+            cout << "current token is not STAR, so callling  parseIdList from parseRightHandSide()\n";
             // parse the next Id-list
             parseIdList(rhsSymbols);
+            cout << "COMPLETED parseIdList from parseRightHandSide()\n";
         }
 
 
@@ -243,7 +251,7 @@ void Parser::parseIdList(vector<string> &rhsSymbols) {
         cout << "Inside parseIDList(), printing rhsSymbols -------> RHS: ";
         printRHSSymbols(rhsSymbols);
 
-        cout << "Inside parseIDList(), printing universe -------> RHS: ";
+        cout << "Inside parseIDList(), printing universe : ";
         printRHSSymbols(universe);
 
 
