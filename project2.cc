@@ -223,6 +223,9 @@ void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
 
             cout << "HANDLING EPSILON CASE: Added epsilon rule to all rules\n";
 
+            cout << "\nPrinting All COMPLETE Rule so far\n";
+            printAllRules();
+
         } else {
 
             cout << "current token is not STAR, so callling  parseIdList from parseRightHandSide()\n";
@@ -251,7 +254,7 @@ void Parser::parseIdList(vector<string> &rhsSymbols) {
     //if the next toek is not ID, meaning epsilon, then I do nothing (epsilon) and the while loop ends
     if (nextToken.token_type == ID) {
 
-        cout << "Another Id-list present, so parsing the Id-List from parseIdList() using parseIdList()\n";
+        cout << "Another ID present, so parsing the Id-List from parseIdList() using parseIdList()\n";
 
         //consume the ID token using expect function, because every Id-list starts with ID
         Token rightSideToken = expect(ID);
