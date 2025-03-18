@@ -94,7 +94,7 @@ private:
     void parseRule();
 
     // Right-hand-side -> Id-list | Id-list OR Right-hand-side
-    void parseRightHandSide(vector<string> &rhsSymbols);
+    void parseRightHandSide(string currentLHS, vector<string> &rhsSymbols);
 
     // Id-list -> ID Id-list | epsilon
     void parseIdList(vector<string> &rhsSymbols);
@@ -155,19 +155,20 @@ void Parser::parseRule() {
 
     //LHS must be ID based on the CFG grammar. so consume the ID token using expect function
     Token lhsToken = expect(ID);
-    newRule.LHS = lhsToken.lexeme;
-    universe.push_back(lhsToken.lexeme);
+    string currentLHS = lhsToken.lexeme;
+    newRule.LHS = currentLHS;
+    universe.push_back(currentLHS);
 
     cout << "\nPrinting IN-PROGRESS Rule so far\n";
     cout << "-------> LHS: " << newRule.LHS << endl;
     printAllRules();
-    cout << "END of Printing IN-PROGRESS Rule so far\n";
+    cout << "END of Printing IN-PROGRESS Rule so far\n\n";
 
     //consume the ARROW token using expect function
     expect(ARROW);
 
     //now RHS starts, parse the right-hand side
-    parseRightHandSide(newRule.RHS);
+    parseRightHandSide(currentLHS, newRule.RHS);
 
     cout << "Parsing RHS done in Rule method\n";
 
@@ -184,7 +185,7 @@ void Parser::parseRule() {
 
 // Right-hand-side -> Id-list | Id-list OR Right-hand-side
 //right-hand side is one or more Id-list’s separated with OR’s
-void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
+void Parser::parseRightHandSide(string currentLHS, vector<string> &rhsSymbols) {
 
     cout << "STARTING parsing  RIGHT HAND SIDE\n";
 
@@ -212,6 +213,15 @@ void Parser::parseRightHandSide(vector<string> &rhsSymbols) {
             // Do nothing, just continue after OR
 
             cout << "current token is STAR, so not parsing the next Id-List\n";
+
+            Rule epsilonRule;
+
+            epsilonRule.LHS = currentLHS;
+            epsilonRule.RHS = {};
+
+            allRules.push_back(epsilonRule);
+
+            cout << "HANDLING EPSILON CASE: Added epsilon rule to all rules\n";
 
         } else {
 
