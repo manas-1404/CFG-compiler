@@ -119,6 +119,8 @@ void Parser::parseRule() {
     Token lhsToken = expect(ID);
     string currentLHS = lhsToken.lexeme;
     newRule.LHS = currentLHS;
+
+    //pushing the LHS to the universe vector, i am doing it only to preserve the grammar order
     universe.push_back(currentLHS);
 
     //consume the ARROW token using expect function
@@ -136,28 +138,41 @@ void Parser::parseRule() {
 //right-hand side is one or more Id-list’s separated with OR’s
 void Parser::parseRightHandSide(string currentLHS) {
 
+    //initializing 1st token just to check for edge case
     Token firstToken = lexer.peek(1);
 
     //edge case: if the first RHS is epsilon only
-    //what if while parsing the rule, A -> * , is present, here RHS = *, then i will only need to add the empty rule and move ahead
+    //what if while parsing the rule, A -> * , is present, here RHS = * ;LHS = A(passed down), then i will only need to add the empty rule and move ahead to next new rule
     if (firstToken.token_type == STAR) {
 
-        //adding epsilon rule case
+        //declaring rule called epsilonRule for epsilon case
         Rule epsilonRule;
+
+        //LHS of epsilon rule is the current LHS passed down by the function
         epsilonRule.LHS = currentLHS;
+
+        //RHS of epsilon rule is empty list because it is epsilon
         epsilonRule.RHS = {};
+
+        //pushing the epsilon rule to the allRules vector
         allRules.push_back(epsilonRule);
 
         //you dont have to continue parsing because the rule has ended
         return;
     }
 
+    //the 1st token is no epsilon, so its a regular case
 
+    //declaring new rule for each rule of same LHS
     Rule newEachRule;
+
+    //LHS of the new rule is the current LHS passed down by the function
     newEachRule.LHS = currentLHS;
 
-    //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list
+    //parsing the first Id-list, because every right-hand-side has atleast 1 Id-list (Id-list meaning C D | E F | * etc etc)
     parseIdList(newEachRule.RHS);
+
+    //pushing the new rule to the allRules vector
     allRules.push_back(newEachRule);
 
 
@@ -172,26 +187,41 @@ void Parser::parseRightHandSide(string currentLHS) {
         //consume the OR token using expect function after parsing the 1st IdList
         expect(OR);
 
+        //initializing the next token after OR, now it could either be a STAR token or an ID token
+        // A -> B C | D b | *
+        //everytime after the OR token, it can either be the next duplicate rule (A -> D b) or it can be the epsilon rule (A -> *)
         Token maybeStar = lexer.peek(1);
 
+        //if the next token is STAR, then its epsilon rule case and I just need to make RHS = {} and append the rule to allRules
         if (maybeStar.token_type == STAR) {
-            // if the alternative is epsilon (no symbols)
-            // Do nothing, just continue after OR
 
+            //now, we have the epsilon rule, A -> *
+
+            //declaring epsilon rule
             Rule epsilonRule;
 
+            //LHS of epsilon rule is the current LHS passed down by the function
             epsilonRule.LHS = currentLHS;
+
+            //RHS of epsilon rule is empty list because it is epsilon
             epsilonRule.RHS = {};
 
+            //pushing the epsilon rule to the allRules vector
             allRules.push_back(epsilonRule);
         } else {
 
+            //now, we have another duplicate rule of same LHS, A -> D b
+
+            //declaring duplicate rule
             Rule duplicateRule;
+
+            //LHS of duplicate rule is the current LHS passed down by the function
             duplicateRule.LHS = currentLHS;
 
-            // parse the next Id-list
+            // parse the next Id-list, this Id-list will recursively append D, b to the RHS vector of the duplicate rule
             parseIdList(duplicateRule.RHS);
 
+            //pushing the duplicate rule to the allRules vector
             allRules.push_back(duplicateRule);
         }
 
@@ -215,7 +245,11 @@ void Parser::parseIdList(vector<string> &rhsSymbols) {
 
         //consume the ID token using expect function, because every Id-list starts with ID
         Token rightSideToken = expect(ID);
+
+        //pushing the ID to the RHS vector
         rhsSymbols.push_back(rightSideToken.lexeme);
+
+        //pushing the ID to the universe vector, I am doing it only to preserve the grammar order
         universe.push_back(rightSideToken.lexeme);
 
         //parse the Id-list which is present for sure
