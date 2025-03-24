@@ -697,7 +697,154 @@ vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
     return sortedGrammar;
 }
 
+// We'll assume you already have these utilities:
+// bool isRuleBefore(const Rule &r1, const Rule &r2);
+// int getCommonPrefixLength(const Rule &r1, const Rule &r2);
+// vector<Rule> findLongestMatchesAndSort(const vector<Rule> &rules);
+// And the data structures:
+// - Rule { string LHS; vector<string> RHS; }
+// - your lexicographic naming scheme for new non-terminals, e.g. "A1", "A2", etc.
 
+static int nextFactorIndex = 1; // e.g. used to generate "A1", "A2", etc. across multiple runs
+
+// helper: returns e.g. "A1" or "A2" for an LHS "A"
+string generateFactoredName(const string &lhs, int count) {
+    // e.g. "A" + to_string(count) => "A1", "A2"
+    return lhs + to_string(count);
+}
+
+// extractPrefix(r, length) => returns first 'length' symbols of r.RHS
+vector<string> extractPrefix(const Rule &r, int length) {
+    vector<string> result;
+    for (int i = 0; i < length && i < (int)r.RHS.size(); i++) {
+        result.push_back(r.RHS[i]);
+    }
+    return result;
+}
+
+// extractAllButPrefixOfSize(r, length) => returns RHS after skipping 'length' symbols
+vector<string> extractAllButPrefixOfSize(const Rule &r, int length) {
+    vector<string> result;
+    for (int i = length; i < (int)r.RHS.size(); i++) {
+        result.push_back(r.RHS[i]);
+    }
+    return result;
+}
+
+// performs the entire left factoring process
+vector<Rule> performLeftFactoring(vector<Rule> grammar) {
+
+    vector<Rule> newGrammar;
+
+    bool done = false;
+    while (!done) {
+
+        vector<Rule> sorted = findLongestMatchesAndSort(grammar);
+        if (sorted.empty()) {
+
+            break;
+        }
+
+        int maxLen = 0;
+        Rule topRule = sorted[0];
+        for (auto &r : grammar) {
+            if (r.LHS == topRule.LHS && &r != &topRule) {
+                int len = getCommonPrefixLength(topRule, r);
+                if (len > maxLen) {
+                    maxLen = len;
+                }
+            }
+        }
+
+        if (maxLen == 0) {
+
+            sort(grammar.begin(), grammar.end(), isRuleBefore);
+
+
+            for (auto &r : grammar) {
+                newGrammar.push_back(r);
+            }
+            grammar.clear();
+            done = true;
+        } else {
+
+            vector<string> thePrefix = extractPrefix(topRule, maxLen);
+
+            string newNt = generateFactoredName(topRule.LHS, nextFactorIndex++);
+
+            vector<Rule> sharedPrefixRules;
+
+
+            vector<Rule> keepInGrammar;
+
+            for (auto &r : grammar) {
+                if (r.LHS == topRule.LHS) {
+
+                    int len = getCommonPrefixLength(r, topRule);
+                    if (len == maxLen) {
+
+                        sharedPrefixRules.push_back(r);
+                    } else {
+                        keepInGrammar.push_back(r);
+                    }
+                } else {
+                    keepInGrammar.push_back(r);
+                }
+            }
+
+
+            Rule factoredRule;
+            factoredRule.LHS = topRule.LHS;
+            factoredRule.RHS = thePrefix;
+            factoredRule.RHS.push_back(newNt);
+
+            keepInGrammar.push_back(factoredRule);
+
+            for (auto &r : sharedPrefixRules) {
+                Rule newNtRule;
+                newNtRule.LHS = newNt;
+
+                newNtRule.RHS = extractAllButPrefixOfSize(r, maxLen);
+
+                newGrammar.push_back(newNtRule);
+            }
+
+            grammar = keepInGrammar;
+        }
+    }
+
+    sort(newGrammar.begin(), newGrammar.end(), isRuleBefore);
+
+    return newGrammar;
+}
+
+
+void printTask5Grammar(const vector<Rule> &factoredGrammar) {
+    //making a copy so we can sort
+    vector<Rule> sortedGrammar = factoredGrammar;
+
+    //sorting by your isRuleBefore function
+    sort(sortedGrammar.begin(), sortedGrammar.end(), isRuleBefore);
+
+    //printing each rule in the specified format
+    for (auto &r : sortedGrammar) {
+        cout << r.LHS << " -> ";
+        if (r.RHS.empty()) {
+
+
+            cout << "#\n";
+        } else {
+            //printing all symbols in the RHS, separated by space
+            for (int i = 0; i < (int)r.RHS.size(); i++) {
+                cout << r.RHS[i];
+                if (i < (int)r.RHS.size() - 1) {
+                    cout << " ";
+                }
+            }
+            cout << " #\n";
+        }
+    }
+}
 
 
 /* 
@@ -737,6 +884,8 @@ void Task4()
 // Task 5: left factoring
 void Task5()
 {
+    vector<Rule> finalFactoredGrammar = performLeftFactoring(allRules);
+    printTask5Grammar(finalFactoredGrammar);
 }
 
 // Task 6: eliminate left recursion
