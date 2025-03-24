@@ -697,14 +697,6 @@ vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
     return sortedGrammar;
 }
 
-// We'll assume you already have these utilities:
-// bool isRuleBefore(const Rule &r1, const Rule &r2);
-// int getCommonPrefixLength(const Rule &r1, const Rule &r2);
-// vector<Rule> findLongestMatchesAndSort(const vector<Rule> &rules);
-// And the data structures:
-// - Rule { string LHS; vector<string> RHS; }
-// - your lexicographic naming scheme for new non-terminals, e.g. "A1", "A2", etc.
-
 static int nextFactorIndex = 1; // e.g. used to generate "A1", "A2", etc. across multiple runs
 
 // helper: returns e.g. "A1" or "A2" for an LHS "A"
@@ -731,6 +723,26 @@ vector<string> extractAllButPrefixOfSize(const Rule &r, int length) {
     return result;
 }
 
+void printRules(const vector<Rule>& rules) {
+    for (const Rule& rule : rules) {
+        cout << rule.LHS << " -> ";
+
+        if (rule.RHS.empty()) {
+            cout << "#"; // Using "#" to denote epsilon
+        } else {
+            for (size_t i = 0; i < rule.RHS.size(); ++i) {
+                cout << rule.RHS[i];
+                if (i < rule.RHS.size() - 1) {
+                    cout << " ";
+                }
+            }
+        }
+
+        cout << endl;
+    }
+}
+
+
 // performs the entire left factoring process
 vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
@@ -740,6 +752,9 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
     while (!done) {
 
         vector<Rule> sorted = findLongestMatchesAndSort(grammar);
+
+        // printRules(sorted);
+
         if (sorted.empty()) {
 
             break;
@@ -756,7 +771,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             }
         }
 
-        if (maxLen == 0) {
+        if (maxLen == 0 || maxLen == topRule.RHS.size()) {
 
             sort(grammar.begin(), grammar.end(), isRuleBefore);
 
@@ -766,6 +781,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             }
             grammar.clear();
             done = true;
+            continue;
         } else {
 
             vector<string> thePrefix = extractPrefix(topRule, maxLen);
