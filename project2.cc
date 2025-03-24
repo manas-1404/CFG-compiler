@@ -598,6 +598,49 @@ void printFollowSets() {
 }
 
 
+bool isRuleBefore(Rule r1, Rule r2) {
+
+    vector<string> seq1 = {r1.LHS};
+    vector<string> seq2 = {r2.LHS};
+
+    seq1.insert(seq1.end(), r1.RHS.begin(), r1.RHS.end());
+    seq2.insert(seq2.end(), r2.RHS.begin(), r2.RHS.end());
+
+    int len = min(seq1.size(), seq2.size());
+    for (int i = 0; i < len; i++) {
+        if (seq1[i] < seq2[i]) {
+            return true;
+        } else if (seq1[i] > seq2[i]) {
+            return false;
+        }
+    }
+
+    return seq1.size() < seq2.size();
+}
+
+
+int getCommonPrefixLength(Rule r1, Rule r2) {
+    // Only compare if LHS is the same
+    if (r1.LHS != r2.LHS) return 0;
+
+    int len = min(r1.RHS.size(), r2.RHS.size());
+    int count = 0;
+
+    for (int i = 0; i < len; i++) {
+        if (r1.RHS[i] == r2.RHS[i]) {
+            count++;
+        } else {
+            break;
+        }
+    }
+
+    return count;
+}
+
+
+
+
+
 /* 
  * Task 1: 
  * Printing the terminals, then nonterminals of grammar in appearing order
