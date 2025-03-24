@@ -757,6 +757,24 @@ void printRHS(const vector<string>& rhs) {
     }
 }
 
+bool areRulesEqual(const Rule &r1, const Rule &r2) {
+
+
+    if (r1.LHS != r2.LHS) return false;
+
+    // Then compare RHS lengths
+    if (r1.RHS.size() != r2.RHS.size()) return false;
+
+    // Finally compare each symbol in the RHS
+    for (int i = 0; i < (int)r1.RHS.size(); i++) {
+        if (r1.RHS[i] != r2.RHS[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 
 // performs the entire left factoring process
@@ -798,7 +816,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             printRHS(topRule.RHS);
             cout << endl;
 
-            if (r.LHS == topRule.LHS && &r != &topRule) {
+            if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
 
                 cout << "LHS of R and TopRule are same and R and Toprule are not eqauly\n";
                 int len = getCommonPrefixLength(topRule, r);
