@@ -865,6 +865,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
             cout << "The prefix is: ";
             printRHS(thePrefix);
+            cout << endl;
 
             string newNt = generateFactoredName(topRule.LHS, nextFactorIndex++);
 
@@ -886,7 +887,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
                 printRHS(topRule.RHS);
                 cout << endl;
 
-                if (r.LHS == topRule.LHS) {
+                if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
 
                     cout << "LHS of R and TopRule are same\n";
 
