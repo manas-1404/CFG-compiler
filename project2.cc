@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -13,6 +14,11 @@ using namespace std;
 struct Rule {
     string LHS;
     vector<string> RHS;
+};
+
+struct RuleWithLongestMatch {
+    int longestMatch;
+    Rule rule;
 };
 
 vector<Rule> allRules;
@@ -637,6 +643,59 @@ int getCommonPrefixLength(Rule r1, Rule r2) {
     return count;
 }
 
+bool compareRuleLongMatch(RuleWithLongestMatch &a, RuleWithLongestMatch &b) {
+    //first compare descending longestMatch
+    if (a.longestMatch != b.longestMatch) {
+        return a.longestMatch > b.longestMatch;
+    }
+
+    //then compare lex order by your existing utility isRuleBefore(r1, r2)
+    return isRuleBefore(a.rule, b.rule);
+}
+
+
+vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
+    //creating a local vector of (longestMatch, Rule)
+    vector<RuleWithLongestMatch> temp;
+
+    //for each rule, find the maximum prefix length with any other rule having same LHS
+    for (int i = 0; i < grammar.size(); i++) {
+        int maxLen = 0;
+        // Only compare with rules that share the same LHS
+        for (int j = 0; j < grammar.size(); j++) {
+            if (i == j) {
+                continue;
+            }
+
+            if (grammar[i].LHS == grammar[j].LHS) {
+
+
+                int len = getCommonPrefixLength(grammar[i], grammar[j]);
+                if (len > maxLen) {
+                    maxLen = len;
+                }
+            }
+        }
+
+        //storing the result
+        RuleWithLongestMatch rlm;
+        rlm.longestMatch = maxLen;
+        rlm.rule = grammar[i];
+        temp.push_back(rlm);
+    }
+
+    //sorting temp using our named compare function
+    sort(temp.begin(), temp.end(), compareRuleLongMatch);
+
+    //building the sorted grammar
+    vector<Rule> sortedGrammar;
+    for (auto &item : temp) {
+        sortedGrammar.push_back(item.rule);
+    }
+
+    //returning the new grammar in correct order
+    return sortedGrammar;
+}
 
 
 
