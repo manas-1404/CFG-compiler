@@ -806,216 +806,323 @@ bool areRulesEqual(const Rule &r1, const Rule &r2) {
 
 
 // performs the entire left factoring process
-vector<Rule> performLeftFactoring(vector<Rule> grammar) {
+// vector<Rule> performLeftFactoring(vector<Rule> grammar) {
+//
+//     vector<Rule> newGrammar;
+//
+//     // cout << "Printing the grammar\n";
+//     // printRules(grammar);
+//     // cout << "----------------------\n";
+//
+//
+//     bool done = false;
+//     while (!done) {
+//
+//         vector<Rule> sorted = findLongestMatchesAndSort(grammar);
+//
+//         // cout << "Starting while loop of left factoring\n";
+//         // printRules(sorted);
+//         // cout << "----------------------\n";
+//
+//         if (sorted.empty()) {
+//
+//             // cout << "Sorted vector is empty so stopping now\n";
+//             break;
+//         }
+//
+//         int maxLen = 0;
+//         Rule topRule = sorted[0];
+//
+//         //here you are finding out the maxLen of common sequence of RHS rules, nothing else is happening here
+//         for (auto &r : grammar) {
+//
+//             // cout << "_________________" << endl;
+//             // cout << "Comparing 2 rules of : \n";
+//             // cout << "Current r: " << r.LHS << " -> ";
+//             // printRHS(r.RHS);
+//             // cout << endl;
+//             //
+//             // cout << "Toprule: " << topRule.LHS << " -> ";
+//             // printRHS(topRule.RHS);
+//             // cout << endl;
+//
+//             if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
+//
+//                 // cout << "LHS of R and TopRule are same and R and Toprule are not eqauly\n";
+//                 int len = getCommonPrefixLength(topRule, r);
+//
+//                 // cout << "Common prefix length(toprule, r) is: " << len << endl;
+//
+//                 if (len > maxLen) {
+//
+//                     // cout << "Common prefix length is greater than maxLen. So making new maxLen\n";
+//                     maxLen = len;
+//                 }
+//             }
+//         }
+//
+//         // cout << "MaxLen is: " << maxLen << endl;
+//
+//         if (maxLen == 0) {
+//
+//             // cout << "Inside maxLen == 0 or maxLen == topRule.RHS.size() condition\n";
+//
+//             sort(grammar.begin(), grammar.end(), isRuleBefore);
+//
+//             // cout << "Printing the sorted grammar\n";
+//
+//             // printRules(grammar);
+//
+//             for (auto &r : grammar) {
+//                 newGrammar.push_back(r);
+//             }
+//
+//             // cout << "printing the new grammar\n";
+//
+//             // printRules(newGrammar);
+//
+//             grammar.clear();
+//             done = true;
+//
+//             // cout << "Done is true now. So while loop shoudl stop\n";
+//             continue;
+//         }
+//         else {
+//
+//             // cout << "maxLen is not zero or topRule.RHS.size(). So we have to do left factoring\n";
+//
+//             // cout << "Toprule is: " << topRule.LHS << " -> ";
+//             // printRHS(topRule.RHS);
+//             // cout << endl;
+//
+//             // cout << "MaxLen is: " << maxLen << endl;
+//
+//             vector<string> thePrefix = extractPrefix(topRule, maxLen);
+//
+//             // cout << "The prefix is: ";
+//             // printRHS(thePrefix);
+//             // cout << endl;
+//
+//             string newNt = generateFactoredName(topRule.LHS, nextFactorIndex++);
+//
+//             // cout << "New non-terminal is: " << newNt << endl;
+//
+//             vector<Rule> sharedPrefixRules;
+//
+//
+//             vector<Rule> keepInGrammar;
+//
+//             for (auto &r : grammar) {
+//
+//                 // cout << "~~~~~~~~~~~~~~~~~~~~" << endl;
+//                 // cout << "Comparing current rule: " << r.LHS << " -> ";
+//                 // printRHS(r.RHS);
+//                 // cout << endl;
+//
+//                 // cout << "Toprule: " << topRule.LHS << " -> ";
+//                 // printRHS(topRule.RHS);
+//                 // cout << endl;
+//
+//                 if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
+//
+//                     // cout << "LHS of R and TopRule are same\n";
+//
+//                     int len = getCommonPrefixLength(r, topRule);
+//
+//                     // cout << "Common prefix length(r, toprule) is: " << len << endl;
+//
+//
+//                     if (len == maxLen) {
+//
+//                         // cout << "Common prefix length is equal to maxLen\n";
+//                         sharedPrefixRules.push_back(r);
+//                         sharedPrefixRules.push_back(topRule);
+//                         // cout << "Pushed the rule to sharedPrefixRules\n";
+//
+//                     } else {
+//
+//                         // cout << "Common prefix length is not equal to maxLen, so pushing to keepInGrammar\n";
+//                         keepInGrammar.push_back(r);
+//                     }
+//                 } else if (areRulesEqual(r, topRule)) {
+//
+//                     // cout << "R and TopRule are EQUAL, so DO NOT push anything to keepInGrammar!!!!!!!!!\n";
+//                     // keepInGrammar.push_back(r);
+//                 } else {
+//
+//                     // cout << "LHS of R and TopRule are not same, so pushing to keepInGrammar\n";
+//                     keepInGrammar.push_back(r);
+//                 }
+//             }
+//
+//             // cout << "++++++++++++++++++++++++++++++\n";
+//             // cout << "Printing the sharedPrefixRules\n";
+//             // printRules(sharedPrefixRules);
+//             // cout << endl;
+//
+//             // cout << "Printing the keepInGrammar\n";
+//             // printRules(keepInGrammar);
+//             // cout << endl;
+//             // cout << "++++++++++++++++++++++++++++++\n";
+//
+//
+//
+//             Rule factoredRule;
+//             factoredRule.LHS = topRule.LHS;
+//             factoredRule.RHS = thePrefix;
+//             factoredRule.RHS.push_back(newNt);
+//
+//             //here you actually push the new rule into the keepInGrammar
+//             //A -> C B C B and A -> C B C D, here you ppush A -> C B C A1
+//             keepInGrammar.push_back(factoredRule);
+//
+//             // cout << "After Pushing the factored rule to keepInGrammar\n";
+//             // printRules(keepInGrammar);
+//
+//             sharedPrefixRules = removeDuplicateRules(sharedPrefixRules);
+//             // cout << "After removing the duplicate rules from sharedPrefixRules\n";
+//             // printRules(sharedPrefixRules);
+//             // cout << endl;
+//
+//             for (auto &r : sharedPrefixRules) {
+//                 Rule newNtRule;
+//                 newNtRule.LHS = newNt;
+//
+//                 newNtRule.RHS = extractAllButPrefixOfSize(r, maxLen);
+//
+//                 // cout << "New rule is: " << newNtRule.LHS << " -> ";
+//                 // printRHS(newNtRule.RHS);
+//                 // cout << endl;
+//
+//                 newGrammar.push_back(newNtRule);
+//
+//                 // cout << "After Pushing the new NT rule to newGrammar\n";
+//                 // printRules(newGrammar);
+//             }
+//
+//             grammar = keepInGrammar;
+//
+//             // cout << "After updating the grammar with keepInGrammar\n";
+//             // printRules(grammar);
+//             // cout << "end of while loop\n";
+//         }
+//     }
+//
+//     sort(newGrammar.begin(), newGrammar.end(), isRuleBefore);
+//
+//     // cout << "Printing the final new grammar\n";
+//     // printRules(newGrammar);
+//     // cout << "---------------------------\n";
+//
+//     return newGrammar;
+// }
+//
 
-    vector<Rule> newGrammar;
 
-    // cout << "Printing the grammar\n";
-    // printRules(grammar);
-    // cout << "----------------------\n";
+vector<Rule> performLeftFactor() {
 
+    //this vector is used to store the new rules like A -> B C D, A -> B C E, A -> B C F, A -> B C G
+    vector<Rule> newRules;
 
-    bool done = false;
-    while (!done) {
+    //this vector is used to store the rules which are left factored
+    vector<Rule> leftFactoredRules;
 
-        vector<Rule> sorted = findLongestMatchesAndSort(grammar);
+    vector<Rule> rulesWithoutLeftFactor;
 
-        // cout << "Starting while loop of left factoring\n";
-        // printRules(sorted);
-        // cout << "----------------------\n";
+    //using this vector to store the remaining grammar and later equating it to the grammarRules
+    vector<Rule> remainingGrammar;
 
-        if (sorted.empty()) {
+    //this vector is used to return the final results
+    vector<Rule> finalResultGrammar;
 
-            // cout << "Sorted vector is empty so stopping now\n";
-            break;
-        }
+    //this vector contains the sorted grammar rules on basis of longest match and then lexically
+    vector<Rule> grammarRules = findLongestMatchesAndSort(allRules);
 
-        int maxLen = 0;
-        Rule topRule = sorted[0];
+    while (grammarRules.size() >= 2) {
 
-        //here you are finding out the maxLen of common sequence of RHS rules, nothing else is happening here
-        for (auto &r : grammar) {
-
-            // cout << "_________________" << endl;
-            // cout << "Comparing 2 rules of : \n";
-            // cout << "Current r: " << r.LHS << " -> ";
-            // printRHS(r.RHS);
-            // cout << endl;
-            //
-            // cout << "Toprule: " << topRule.LHS << " -> ";
-            // printRHS(topRule.RHS);
-            // cout << endl;
-
-            if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
-
-                // cout << "LHS of R and TopRule are same and R and Toprule are not eqauly\n";
-                int len = getCommonPrefixLength(topRule, r);
-
-                // cout << "Common prefix length(toprule, r) is: " << len << endl;
-
-                if (len > maxLen) {
-
-                    // cout << "Common prefix length is greater than maxLen. So making new maxLen\n";
-                    maxLen = len;
-                }
-            }
-        }
-
-        // cout << "MaxLen is: " << maxLen << endl;
-
-        if (maxLen == 0) {
-
-            // cout << "Inside maxLen == 0 or maxLen == topRule.RHS.size() condition\n";
-
-            sort(grammar.begin(), grammar.end(), isRuleBefore);
-
-            // cout << "Printing the sorted grammar\n";
-
-            // printRules(grammar);
-
-            for (auto &r : grammar) {
-                newGrammar.push_back(r);
-            }
-
-            // cout << "printing the new grammar\n";
-
-            // printRules(newGrammar);
-
-            grammar.clear();
-            done = true;
-
-            // cout << "Done is true now. So while loop shoudl stop\n";
-            continue;
-        }
-        else {
-
-            // cout << "maxLen is not zero or topRule.RHS.size(). So we have to do left factoring\n";
-
-            // cout << "Toprule is: " << topRule.LHS << " -> ";
-            // printRHS(topRule.RHS);
-            // cout << endl;
-
-            // cout << "MaxLen is: " << maxLen << endl;
-
-            vector<string> thePrefix = extractPrefix(topRule, maxLen);
-
-            // cout << "The prefix is: ";
-            // printRHS(thePrefix);
-            // cout << endl;
-
-            string newNt = generateFactoredName(topRule.LHS, nextFactorIndex++);
-
-            // cout << "New non-terminal is: " << newNt << endl;
-
-            vector<Rule> sharedPrefixRules;
+        newRules.clear();
+        rulesWithoutLeftFactor.clear();
+        remainingGrammar.clear();
 
 
-            vector<Rule> keepInGrammar;
+        Rule firstRule = grammarRules[0];
 
-            for (auto &r : grammar) {
+        int maxCommonLength = getCommonPrefixLength(firstRule, grammarRules[1]);
 
-                // cout << "~~~~~~~~~~~~~~~~~~~~" << endl;
-                // cout << "Comparing current rule: " << r.LHS << " -> ";
-                // printRHS(r.RHS);
-                // cout << endl;
+        if (maxCommonLength != 0) {
 
-                // cout << "Toprule: " << topRule.LHS << " -> ";
-                // printRHS(topRule.RHS);
-                // cout << endl;
+            for (int i = 1; i < grammarRules.size(); i++) {
 
-                if (r.LHS == topRule.LHS && !areRulesEqual(r, topRule)) {
+                if (firstRule.LHS == grammarRules[i].LHS) {
+                    int commonLength = getCommonPrefixLength(firstRule, grammarRules[i]);
 
-                    // cout << "LHS of R and TopRule are same\n";
-
-                    int len = getCommonPrefixLength(r, topRule);
-
-                    // cout << "Common prefix length(r, toprule) is: " << len << endl;
-
-
-                    if (len == maxLen) {
-
-                        // cout << "Common prefix length is equal to maxLen\n";
-                        sharedPrefixRules.push_back(r);
-                        sharedPrefixRules.push_back(topRule);
-                        // cout << "Pushed the rule to sharedPrefixRules\n";
-
-                    } else {
-
-                        // cout << "Common prefix length is not equal to maxLen, so pushing to keepInGrammar\n";
-                        keepInGrammar.push_back(r);
+                    if (maxCommonLength == commonLength) {
+                        newRules.push_back(grammarRules[i]);
                     }
-                } else if (areRulesEqual(r, topRule)) {
-
-                    // cout << "R and TopRule are EQUAL, so DO NOT push anything to keepInGrammar!!!!!!!!!\n";
-                    // keepInGrammar.push_back(r);
-                } else {
-
-                    // cout << "LHS of R and TopRule are not same, so pushing to keepInGrammar\n";
-                    keepInGrammar.push_back(r);
                 }
             }
 
-            // cout << "++++++++++++++++++++++++++++++\n";
-            // cout << "Printing the sharedPrefixRules\n";
-            // printRules(sharedPrefixRules);
-            // cout << endl;
+            //add the 1st rule only after adding all the other common same prefix rules
+            newRules.push_back(firstRule);
 
-            // cout << "Printing the keepInGrammar\n";
-            // printRules(keepInGrammar);
-            // cout << endl;
-            // cout << "++++++++++++++++++++++++++++++\n";
+            //removing the rules of A -> alpha X from the grammarRules
+            for (int i = 0; i < grammarRules.size(); i++) {
+                bool isMatch = false;
 
+                for (int j = 0; j < newRules.size(); j++) {
+                    if (areRulesEqual(grammarRules[i], newRules[j])) {
+                        isMatch = true;
+                        break;
+                    }
+                }
 
+                if (!isMatch) {
+                    rulesWithoutLeftFactor.push_back(grammarRules[i]);
+                }
+            }
 
             Rule factoredRule;
-            factoredRule.LHS = topRule.LHS;
-            factoredRule.RHS = thePrefix;
-            factoredRule.RHS.push_back(newNt);
+            factoredRule.LHS = firstRule.LHS;
+            factoredRule.RHS = extractPrefix(firstRule, maxCommonLength);
 
-            //here you actually push the new rule into the keepInGrammar
-            //A -> C B C B and A -> C B C D, here you ppush A -> C B C A1
-            keepInGrammar.push_back(factoredRule);
+            string newNT = generateFactoredName(firstRule.LHS, nextFactorIndex++);
 
-            // cout << "After Pushing the factored rule to keepInGrammar\n";
-            // printRules(keepInGrammar);
+            factoredRule.RHS.push_back(newNT);
 
-            sharedPrefixRules = removeDuplicateRules(sharedPrefixRules);
-            // cout << "After removing the duplicate rules from sharedPrefixRules\n";
-            // printRules(sharedPrefixRules);
-            // cout << endl;
+            rulesWithoutLeftFactor.push_back(factoredRule);
 
-            for (auto &r : sharedPrefixRules) {
-                Rule newNtRule;
-                newNtRule.LHS = newNt;
+            for (int k = 0; k < newRules.size(); k++) {
+                Rule newRule;
+                newRule.LHS = newRules[k].LHS;
+                newRule.RHS = extractAllButPrefixOfSize(newRules[k], maxCommonLength);
 
-                newNtRule.RHS = extractAllButPrefixOfSize(r, maxLen);
-
-                // cout << "New rule is: " << newNtRule.LHS << " -> ";
-                // printRHS(newNtRule.RHS);
-                // cout << endl;
-
-                newGrammar.push_back(newNtRule);
-
-                // cout << "After Pushing the new NT rule to newGrammar\n";
-                // printRules(newGrammar);
+                finalResultGrammar.push_back(newRule);
             }
 
-            grammar = keepInGrammar;
+            grammarRules = rulesWithoutLeftFactor;
 
-            // cout << "After updating the grammar with keepInGrammar\n";
-            // printRules(grammar);
-            // cout << "end of while loop\n";
+        }
+
+        else {
+
+            for (int i = 0; i < grammarRules.size(); i++) {
+
+                if (firstRule.LHS == grammarRules[i].LHS) {
+                    finalResultGrammar.push_back(grammarRules[i]);
+                }else {
+                    remainingGrammar.push_back(grammarRules[i]);
+                }
+
+            }
+
+            grammarRules = remainingGrammar;
+
         }
     }
 
-    sort(newGrammar.begin(), newGrammar.end(), isRuleBefore);
-
-    // cout << "Printing the final new grammar\n";
-    // printRules(newGrammar);
-    // cout << "---------------------------\n";
-
-    return newGrammar;
+    return finalResultGrammar;
 }
+
 
 
 void printTask5Grammar(const vector<Rule> &factoredGrammar) {
@@ -1083,7 +1190,7 @@ void Task4()
 // Task 5: left factoring
 void Task5()
 {
-    vector<Rule> finalFactoredGrammar = performLeftFactoring(allRules);
+    vector<Rule> finalFactoredGrammar = performLeftFactor();
     printTask5Grammar(finalFactoredGrammar);
 }
 
