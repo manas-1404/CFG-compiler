@@ -1093,7 +1093,7 @@ vector<Rule> performLeftFactor() {
 
             for (int k = 0; k < newRules.size(); k++) {
                 Rule newRule;
-                newRule.LHS = newRules[k].LHS;
+                newRule.LHS = newNT;
                 newRule.RHS = extractAllButPrefixOfSize(newRules[k], maxCommonLength);
 
                 finalResultGrammar.push_back(newRule);
@@ -1255,7 +1255,8 @@ int main (int argc, char* argv[])
             Task4();
             break;
 
-        case 5: Task5();
+        case 5:
+            Task5();
             break;
         
         case 6: Task6();
