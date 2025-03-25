@@ -916,6 +916,10 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
                         cout << "Common prefix length is not equal to maxLen, so pushing to keepInGrammar\n";
                         keepInGrammar.push_back(r);
                     }
+                } else if (areRulesEqual(r, topRule)) {
+
+                    cout << "R and TopRule are EQUAL, so DO NOT push anything to keepInGrammar!!!!!!!!!\n";
+                    // keepInGrammar.push_back(r);
                 } else {
 
                     cout << "LHS of R and TopRule are not same, so pushing to keepInGrammar\n";
@@ -940,6 +944,8 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             factoredRule.RHS = thePrefix;
             factoredRule.RHS.push_back(newNt);
 
+            //here you actually push the new rule into the keepInGrammar
+            //A -> C B C B and A -> C B C D, here you ppush A -> C B C A1
             keepInGrammar.push_back(factoredRule);
 
             cout << "After Pushing the factored rule to keepInGrammar\n";
