@@ -804,6 +804,8 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
         int maxLen = 0;
         Rule topRule = sorted[0];
+
+        //here you are finding out the maxLen of common sequence of RHS rules, nothing else is happening here
         for (auto &r : grammar) {
 
             cout << "_________________" << endl;
@@ -861,6 +863,12 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
             cout << "maxLen is not zero or topRule.RHS.size(). So we have to do left factoring\n";
 
+            cout << "Toprule is: " << topRule.LHS << " -> ";
+            printRHS(topRule.RHS);
+            cout << endl;
+
+            cout << "MaxLen is: " << maxLen << endl;
+
             vector<string> thePrefix = extractPrefix(topRule, maxLen);
 
             cout << "The prefix is: ";
@@ -900,6 +908,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
                         cout << "Common prefix length is equal to maxLen\n";
                         sharedPrefixRules.push_back(r);
+                        sharedPrefixRules.push_back(topRule);
                         cout << "Pushed the rule to sharedPrefixRules\n";
 
                     } else {
