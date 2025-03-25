@@ -1,0 +1,3604 @@
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:/home/CFG-compiler# ./a.out 5 < tests/test12.txt
+Printing the grammar
+S -> C B C D A B C
+A -> C B C D
+A -> C B C B
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+----------------------
+Starting while loop of left factoring
+A -> C B C B
+A -> C B C D
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C B
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C D
+Toprule: A -> C B C B
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C B
+Toprule: A -> C B C B
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C B
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C B
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C B
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C B
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C B
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A1
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C B
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C D
+Toprule: A -> C B C B
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C B
+Toprule: A -> C B C B
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C B
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C B
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C B
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C B
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C B
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C D
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B C B
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B C B
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+New rule is: A1 -> D
+After Pushing the new NT rule to newGrammar
+A1 -> D
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B C B
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C B
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A2
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C B
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A2
+New rule is: A2 -> B
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A2
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A2
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A2
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A3
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A2
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A2
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A3
+New rule is: A3 -> A2
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A3
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A3
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A3
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A4
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A3
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A3
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A4
+New rule is: A4 -> A3
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A4
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A4
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A4
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A5
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A4
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A4
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A5
+New rule is: A5 -> A4
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A5
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A5
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A5
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A6
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A5
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A5
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A6
+New rule is: A6 -> A5
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A6
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A6
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A6
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A7
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A6
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A6
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A7
+New rule is: A7 -> A6
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A7
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A7
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A7
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A8
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A7
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A7
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A8
+New rule is: A8 -> A7
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A8
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A8
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A8
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A9
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A8
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A8
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A9
+New rule is: A9 -> A8
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A9
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A9
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A9
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A10
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A9
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A9
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A10
+New rule is: A10 -> A9
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A10
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A10
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A10
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A11
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A10
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A10
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A11
+New rule is: A11 -> A10
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A11
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A11
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A11
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A12
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A11
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A11
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A12
+New rule is: A12 -> A11
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A12
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A12
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A12
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A13
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A12
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A12
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A13
+New rule is: A13 -> A12
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A13
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A13
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A13
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A14
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A13
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A13
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A14
+New rule is: A14 -> A13
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A14
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A14
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A14
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A15
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A14
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A14
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A15
+New rule is: A15 -> A14
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A15
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A15
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A15
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A16
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A15
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A15
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A16
+New rule is: A16 -> A15
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A16
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A16
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A16
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A17
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A16
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A16
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A17
+New rule is: A17 -> A16
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A17
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A17
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A17
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A18
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A17
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A17
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A18
+New rule is: A18 -> A17
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A18
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A18
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A18
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A19
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A18
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A18
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A19
+New rule is: A19 -> A18
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A19
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A19
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A19
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A20
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A19
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A19
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A20
+New rule is: A20 -> A19
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A20
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A20
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A20
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A21
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A20
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A20
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A21
+New rule is: A21 -> A20
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+A21 -> A20
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A21
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A21
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A21
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A22
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A21
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A21
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A22
+New rule is: A22 -> A21
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+A21 -> A20
+A22 -> A21
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A22
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A22
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A22
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A23
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A22
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A22
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A23
+New rule is: A23 -> A22
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+A21 -> A20
+A22 -> A21
+A23 -> A22
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A23
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A23
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A23
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A24
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A23
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A23
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A24
+New rule is: A24 -> A23
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+A21 -> A20
+A22 -> A21
+A23 -> A22
+A24 -> A23
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A24
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A24
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A24
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A25
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: B -> b
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: C -> c
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: D -> d
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A1
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B C A24
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 3
+Common prefix length is equal to maxLen
+Pushed the rule to sharedPrefixRules
+++++++++++++++++++++++++++++++
+Printing the sharedPrefixRules
+A -> C B C A24
+
+Printing the keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+
+++++++++++++++++++++++++++++++
+After Pushing the factored rule to keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A25
+New rule is: A25 -> A24
+After Pushing the new NT rule to newGrammar
+A1 -> D
+A2 -> B
+A3 -> A2
+A4 -> A3
+A5 -> A4
+A6 -> A5
+A7 -> A6
+A8 -> A7
+A9 -> A8
+A10 -> A9
+A11 -> A10
+A12 -> A11
+A13 -> A12
+A14 -> A13
+A15 -> A14
+A16 -> A15
+A17 -> A16
+A18 -> A17
+A19 -> A18
+A20 -> A19
+A21 -> A20
+A22 -> A21
+A23 -> A22
+A24 -> A23
+A25 -> A24
+After updating the grammar with keepInGrammar
+S -> C B C D A B C
+A -> C B D
+A -> C B B
+B -> b
+C -> c
+D -> d
+A -> C B C A1
+A -> C B C A25
+end of while loop
+Starting while loop of left factoring
+A -> C B C A1
+A -> C B C A25
+A -> C B B
+A -> C B D
+B -> b
+C -> c
+D -> d
+S -> C B C D A B C
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: S -> C B C D A B C
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 2
+_________________
+Comparing 2 rules of :
+Current r: B -> b
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: C -> c
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: D -> d
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A1
+Toprule: A -> C B C A1
+_________________
+Comparing 2 rules of :
+Current r: A -> C B C A25
+Toprule: A -> C B C A1
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 3
+Common prefix length is greater than maxLen. So making new maxLen
+MaxLen is: 3
+maxLen is not zero or topRule.RHS.size(). So we have to do left factoring
+The prefix is: C B C
+New non-terminal is: A26
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: S -> C B C D A B C
+Toprule: A -> C B C A1
+LHS of R and TopRule are not same, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B D
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix length(r, toprule) is: 2
+Common prefix length is not equal to maxLen, so pushing to keepInGrammar
+~~~~~~~~~~~~~~~~~~~~
+Comparing current rule: A -> C B B
+Toprule: A -> C B C A1
+LHS of R and TopRule are same
+Common prefix leng^C
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:/home/CFG-compiler#

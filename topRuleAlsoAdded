@@ -1,0 +1,134 @@
+Printing the grammar
+hello -> world
+hello -> a b
+hello -> c1 c2
+world -> w world
+world -> #
+a -> x a y
+a -> z
+b -> x y z
+c1 -> y c1
+c1 -> y
+c2 -> w c2 z
+c2 -> #
+----------------------
+Starting while loop of left factoring
+c1 -> y
+c1 -> y c1
+a -> x a y
+a -> z
+b -> x y z
+c2 -> #
+c2 -> w c2 z
+hello -> a b
+hello -> c1 c2
+hello -> world
+world -> #
+world -> w world
+----------------------
+_________________
+Comparing 2 rules of :
+Current r: hello -> world
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: hello -> a b
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: hello -> c1 c2
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: world -> w world
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: world -> #
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: a -> x a y
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: a -> z
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: b -> x y z
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: c1 -> y c1
+Toprule: c1 -> y
+LHS of R and TopRule are same and R and Toprule are not eqauly
+Common prefix length(toprule, r) is: 1
+Common prefix length is greater than maxLen. So making new maxLen
+_________________
+Comparing 2 rules of :
+Current r: c1 -> y
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: c2 -> w c2 z
+Toprule: c1 -> y
+_________________
+Comparing 2 rules of :
+Current r: c2 -> #
+Toprule: c1 -> y
+MaxLen is: 1
+Inside maxLen == 0 or maxLen == topRule.RHS.size() condition
+Printing the sorted grammar
+a -> x a y
+a -> z
+b -> x y z
+c1 -> y
+c1 -> y c1
+c2 -> #
+c2 -> w c2 z
+hello -> a b
+hello -> c1 c2
+hello -> world
+world -> #
+world -> w world
+printing the new grammar
+a -> x a y
+a -> z
+b -> x y z
+c1 -> y
+c1 -> y c1
+c2 -> #
+c2 -> w c2 z
+hello -> a b
+hello -> c1 c2
+hello -> world
+world -> #
+world -> w world
+Done is true now. So while loop shoudl stop
+Printing the final new grammar
+a -> x a y
+a -> z
+b -> x y z
+c1 -> y
+c1 -> y c1
+c2 -> #
+c2 -> w c2 z
+hello -> a b
+hello -> c1 c2
+hello -> world
+world -> #
+world -> w world
+---------------------------
+a -> x a y #
+a -> z #
+b -> x y z #
+c1 -> y #
+c1 -> y c1 #
+c2 -> #
+c2 -> w c2 z #
+hello -> a b #
+hello -> c1 c2 #
+hello -> world #
+world -> #
+world -> w world #
