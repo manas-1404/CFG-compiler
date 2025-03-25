@@ -705,18 +705,30 @@ int getCommonPrefixLength(Rule r1, Rule r2) {
 }
 
 //method which will compare the Rules based on the longestMatch of common prefix and then lexically
+// bool compareRuleLongMatch(RuleWithLongestMatch &a, RuleWithLongestMatch &b) {
+//
+//     //first comparing if the longestMatch of 2 rules is not same
+//     if (a.longestMatch != b.longestMatch) {
+//
+//         //returning true if the longestMatch of a is greater than b, else false
+//         return a.longestMatch > b.longestMatch;
+//     }
+//
+//     //then compare lexically which rule comes first using the isRuleBefore function, which will return true if a is before b, else false
+//     return isRuleBefore(a.rule, b.rule);
+// }
+
 bool compareRuleLongMatch(RuleWithLongestMatch &a, RuleWithLongestMatch &b) {
-
-    //first comparing if the longestMatch of 2 rules is not same
-    if (a.longestMatch != b.longestMatch) {
-
-        //returning true if the longestMatch of a is greater than b, else false
-        return a.longestMatch > b.longestMatch;
+    if (a.longestMatch < b.longestMatch) {
+        return true;
+    } else if (b.longestMatch < a.longestMatch) {
+        return false;
+    } else {
+        // Tie in longestMatch: use lexicographic order
+        return isRuleBefore(a.rule, b.rule);
     }
-
-    //then compare lexically which rule comes first using the isRuleBefore function, which will return true if a is before b, else false
-    return isRuleBefore(a.rule, b.rule);
 }
+
 
 //method to find the longest matches of the rules in the grammar, then later sort is 1st on longestMatch and then lexically
 vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
