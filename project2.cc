@@ -311,16 +311,39 @@ string ruleToString(Rule &rule) {
     return result;
 }
 
+bool areRulesEqual(const Rule &r1, const Rule &r2) {
+
+
+    if (r1.LHS != r2.LHS) return false;
+
+    // Then compare RHS lengths
+    if (r1.RHS.size() != r2.RHS.size()) return false;
+
+    // Finally compare each symbol in the RHS
+    for (int i = 0; i < (int)r1.RHS.size(); i++) {
+        if (r1.RHS[i] != r2.RHS[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
-    unordered_set<string> seen;
     vector<Rule> result;
 
     for (int i = 0; i < rules.size(); i++) {
-        string key = ruleToString(rules[i]);
+        bool isDuplicate = false;
 
-        if (seen.find(key) == seen.end()) {
+        for (int j = 0; j < result.size(); j++) {
+            if (areRulesEqual(rules[i], result[j])) {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (!isDuplicate) {
             result.push_back(rules[i]);
-            seen.insert(key);
         }
     }
 
@@ -784,25 +807,6 @@ void printRHS(const vector<string>& rhs) {
         }
     }
 }
-
-bool areRulesEqual(const Rule &r1, const Rule &r2) {
-
-
-    if (r1.LHS != r2.LHS) return false;
-
-    // Then compare RHS lengths
-    if (r1.RHS.size() != r2.RHS.size()) return false;
-
-    // Finally compare each symbol in the RHS
-    for (int i = 0; i < (int)r1.RHS.size(); i++) {
-        if (r1.RHS[i] != r2.RHS[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
 
 
 // performs the entire left factoring process
