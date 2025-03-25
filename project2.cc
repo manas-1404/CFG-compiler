@@ -300,9 +300,9 @@ void removeDuplicates(vector<string>& vec) {
     vec = result;
 }
 
-string ruleToString(Rule& rule) {
+string ruleToString(Rule &rule) {
     string result = rule.LHS + "->";
-    for (size_t i = 0; i < rule.RHS.size(); ++i) {
+    for (int i = 0; i < rule.RHS.size(); i++) {
         result += rule.RHS[i];
         if (i < rule.RHS.size() - 1) {
             result += " ";
@@ -311,15 +311,15 @@ string ruleToString(Rule& rule) {
     return result;
 }
 
-vector<Rule> removeDuplicateRules(vector<Rule>& rules) {
+vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
     unordered_set<string> seen;
     vector<Rule> result;
 
-    for (const Rule& rule : rules) {
-        string key = ruleToString(rule);
+    for (int i = 0; i < rules.size(); i++) {
+        string key = ruleToString(rules[i]);
 
         if (seen.find(key) == seen.end()) {
-            result.push_back(rule);
+            result.push_back(rules[i]);
             seen.insert(key);
         }
     }
