@@ -311,39 +311,16 @@ string ruleToString(Rule &rule) {
     return result;
 }
 
-bool areRulesEqual(const Rule &r1, const Rule &r2) {
-
-
-    if (r1.LHS != r2.LHS) return false;
-
-    // Then compare RHS lengths
-    if (r1.RHS.size() != r2.RHS.size()) return false;
-
-    // Finally compare each symbol in the RHS
-    for (int i = 0; i < (int)r1.RHS.size(); i++) {
-        if (r1.RHS[i] != r2.RHS[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
 vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
+    unordered_set<string> seen;
     vector<Rule> result;
 
     for (int i = 0; i < rules.size(); i++) {
-        bool isDuplicate = false;
+        string key = ruleToString(rules[i]);
 
-        for (int j = 0; j < result.size(); j++) {
-            if (areRulesEqual(rules[i], result[j])) {
-                isDuplicate = true;
-                break;
-            }
-        }
-
-        if (!isDuplicate) {
+        if (seen.find(key) == seen.end()) {
             result.push_back(rules[i]);
+            seen.insert(key);
         }
     }
 
@@ -808,6 +785,25 @@ void printRHS(const vector<string>& rhs) {
     }
 }
 
+bool areRulesEqual(const Rule &r1, const Rule &r2) {
+
+
+    if (r1.LHS != r2.LHS) return false;
+
+    // Then compare RHS lengths
+    if (r1.RHS.size() != r2.RHS.size()) return false;
+
+    // Finally compare each symbol in the RHS
+    for (int i = 0; i < (int)r1.RHS.size(); i++) {
+        if (r1.RHS[i] != r2.RHS[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 
 // performs the entire left factoring process
 vector<Rule> performLeftFactoring(vector<Rule> grammar) {
@@ -983,7 +979,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             cout << "After Pushing the factored rule to keepInGrammar\n";
             printRules(keepInGrammar);
 
-            removeDuplicateRules(sharedPrefixRules);
+            sharedPrefixRules = removeDuplicateRules(sharedPrefixRules);
             cout << "After removing the duplicate rules from sharedPrefixRules\n";
             printRules(sharedPrefixRules);
             cout << endl;
