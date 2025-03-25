@@ -1040,14 +1040,21 @@ vector<Rule> performLeftFactor() {
 
     while (grammarRules.size() >= 2) {
 
+        cout << "The grammarRule size is : " << grammarRules.size() << endl;
+
         newRules.clear();
         rulesWithoutLeftFactor.clear();
         remainingGrammar.clear();
 
+        cout << "-------------------------\n";
+        printRules(grammarRules);
+        cout << endl;
 
         Rule firstRule = grammarRules[0];
 
         int maxCommonLength = getCommonPrefixLength(firstRule, grammarRules[1]);
+
+        cout << "Max common length is : " << maxCommonLength << endl;
 
         if (maxCommonLength != 0) {
 
@@ -1065,6 +1072,10 @@ vector<Rule> performLeftFactor() {
             //add the 1st rule only after adding all the other common same prefix rules
             newRules.push_back(firstRule);
 
+            cout << "Added all the same common prefix rules into newRules";
+            printRules(newRules);
+            cout << endl;
+
             //removing the rules of A -> alpha X from the grammarRules
             for (int i = 0; i < grammarRules.size(); i++) {
                 bool isMatch = false;
@@ -1080,6 +1091,8 @@ vector<Rule> performLeftFactor() {
                     rulesWithoutLeftFactor.push_back(grammarRules[i]);
                 }
             }
+
+            cout << ""
 
             Rule factoredRule;
             factoredRule.LHS = firstRule.LHS;
