@@ -300,6 +300,34 @@ void removeDuplicates(vector<string>& vec) {
     vec = result;
 }
 
+string ruleToString(Rule& rule) {
+    string result = rule.LHS + "->";
+    for (size_t i = 0; i < rule.RHS.size(); ++i) {
+        result += rule.RHS[i];
+        if (i < rule.RHS.size() - 1) {
+            result += " ";
+        }
+    }
+    return result;
+}
+
+vector<Rule> removeDuplicateRules(vector<Rule>& rules) {
+    unordered_set<string> seen;
+    vector<Rule> result;
+
+    for (const Rule& rule : rules) {
+        string key = ruleToString(rule);
+
+        if (seen.find(key) == seen.end()) {
+            result.push_back(rule);
+            seen.insert(key);
+        }
+    }
+
+    return result;
+}
+
+
 
 bool isNonTerminal(const string &symbol) {
     return nonTerminalsSet.find(symbol) != nonTerminalsSet.end();
@@ -951,6 +979,11 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
             cout << "After Pushing the factored rule to keepInGrammar\n";
             printRules(keepInGrammar);
 
+            removeDuplicateRules(sharedPrefixRules);
+            cout << "After removing the duplicate rules from sharedPrefixRules\n";
+            printRules(sharedPrefixRules);
+            cout << endl;
+
             for (auto &r : sharedPrefixRules) {
                 Rule newNtRule;
                 newNtRule.LHS = newNt;
@@ -979,6 +1012,7 @@ vector<Rule> performLeftFactoring(vector<Rule> grammar) {
 
     cout << "Printing the final new grammar\n";
     printRules(newGrammar);
+    cout << "---------------------------\n";
 
     return newGrammar;
 }
