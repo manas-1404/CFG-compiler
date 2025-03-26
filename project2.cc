@@ -1049,6 +1049,265 @@ void printTask5Grammar(const vector<Rule> &factoredGrammar) {
 }
 
 
+vector<Rule> getRulesForNonTerminal(string &nonTerminal, vector<Rule> &grammar) {
+    vector<Rule> result;
+
+    for (Rule &rule : grammar) {
+        if (rule.LHS == nonTerminal) {
+            result.push_back(rule);
+        }
+    }
+
+    return result;
+}
+
+
+//expanding a rule A -> B R using all the rules of B.
+vector<Rule> expandRulesForNonterminal(const string &A, const vector<Rule> &bRules,const vector<string> &suffixR){
+
+    vector<Rule> result;
+
+    //for each rule of B: B -> something (call it Ri)
+    //building a new rule A -> (Ri followed by R)
+    for (const Rule &ruleB : bRules)
+    {
+        // ruleB.RHS is the sequence for that production of B
+        Rule newRule;
+        newRule.LHS = A;
+
+        //copying all symbols from ruleB.RHS
+        for (const string &symbol : ruleB.RHS) {
+            newRule.RHS.push_back(symbol);
+        }
+
+        //appending the suffix R at the end
+        for (const string &symbol : suffixR) {
+            newRule.RHS.push_back(symbol);
+        }
+
+        //finaly i get the rule,  A -> ruleB.RHS + suffixR
+        result.push_back(newRule);
+    }
+
+    return result;
+}
+
+
+//separate left-recursive and non-left-recursive rules for a given non-terminal A
+pair<vector<Rule>, vector<Rule>> splitLeftRecursiveRules(string &nonTerminal, vector<Rule> &rulesForA){
+
+    vector<Rule> leftRecursive;
+    vector<Rule> nonLeftRecursive;
+
+    for (const Rule &rule : rulesForA)
+    {
+        //just doing a sanity check for rule must belong to A
+        if (rule.LHS != nonTerminal) {
+            continue;
+        }
+
+        //rule is left-recursive if RHS is non-empty and starts with A
+        if (!rule.RHS.empty() && rule.RHS[0] == nonTerminal) {
+            leftRecursive.push_back(rule);
+        } else {
+            nonLeftRecursive.push_back(rule);
+        }
+    }
+
+    return {leftRecursive, nonLeftRecursive};
+}
+
+
+pair<vector<Rule>, vector<Rule>> eliminateImmediateLeftRecursion(const string &A,const vector<Rule> &leftRec, const vector<Rule> &nonLeftRec, const string &AprimeName)
+{
+    //if there are no left-recursive rules, then no change is needed:
+    if (leftRec.empty()) {
+        //expansions for A remain the same (nonLeftRec),
+        //no new expansions for A'.
+        return make_pair(nonLeftRec, vector<Rule>());
+    }
+
+    vector<Rule> newRulesForA;
+    for (const Rule &nr : nonLeftRec) {
+        //here what if we have A -> beta. Then it becomes A -> beta A'
+        Rule transformed;
+        transformed.LHS = A;
+        transformed.RHS = nr.RHS;
+
+        //push back A'
+        transformed.RHS.push_back(AprimeName);
+        newRulesForA.push_back(transformed);
+    }
+
+    vector<Rule> newRulesForAprime;
+
+    for (const Rule &lr : leftRec) {
+        Rule transformed;
+        transformed.LHS = AprimeName;
+
+        for (int i = 1; i < (int)lr.RHS.size(); i++) {
+            transformed.RHS.push_back(lr.RHS[i]);
+        }
+
+        transformed.RHS.push_back(AprimeName);
+        newRulesForAprime.push_back(transformed);
+    }
+
+    {
+        Rule epsilonRule;
+        epsilonRule.LHS = AprimeName;
+        // no symbols in RHS => epsilon
+        newRulesForAprime.push_back(epsilonRule);
+    }
+
+    return make_pair(newRulesForA, newRulesForAprime);
+}
+
+
+vector<Rule> eliminateLeftRecursionAlgorithm()
+{
+
+    vector<string> sortedNT(nonTerminalsSet.begin(), nonTerminalsSet.end());
+    sort(sortedNT.begin(), sortedNT.end());
+
+
+    map<string, vector<Rule>> rulesMap;
+    for (auto &A : sortedNT) {
+        rulesMap[A] = {};
+    }
+
+    //filling them by grouping from allRules
+    for (auto &r : allRules) {
+
+        rulesMap[r.LHS].push_back(r);
+    }
+
+    static map<string,int> nextIndexForA;
+
+    for (int i = 0; i < (int)sortedNT.size(); i++) {
+        string Ai = sortedNT[i];
+
+        for (int j = 0; j < i; j++) {
+            string Aj = sortedNT[j];
+
+
+            vector<Rule> oldAi = rulesMap[Ai];
+            vector<Rule> newAi;
+
+            for (auto &r : oldAi) {
+                // check if it's of the form Ai->Aj gamma
+                if (!r.RHS.empty() && r.RHS[0] == Aj) {
+
+                    vector<string> gamma(r.RHS.begin() + 1, r.RHS.end());
+                    for (auto &r0 : rulesMap[Aj]) {
+
+                        Rule newRule;
+                        newRule.LHS = Ai;
+                        // copy delta
+                        for (auto &sym : r0.RHS) {
+                            newRule.RHS.push_back(sym);
+                        }
+
+
+                        for (auto &sym : gamma) {
+                            newRule.RHS.push_back(sym);
+                        }
+                        newAi.push_back(newRule);
+                    }
+                } else {
+                    //not offending rule, so keep it
+                    newAi.push_back(r);
+                }
+            }
+
+            //updating rulesMap[Ai]
+            rulesMap[Ai] = newAi;
+        }
+
+
+        vector<Rule> AiRules = rulesMap[Ai];
+
+        auto splitted = splitLeftRecursiveRules(Ai, AiRules);
+        vector<Rule> leftRec = splitted.first;
+        vector<Rule> nonLeftRec = splitted.second;
+
+        if (!leftRec.empty()) {
+
+            int indexCount = nextIndexForA[Ai] + 1;
+            nextIndexForA[Ai] = indexCount;
+            string AiPrime = generateFactoredName(Ai, indexCount);
+
+
+            auto result = eliminateImmediateLeftRecursion(Ai, leftRec, nonLeftRec, AiPrime);
+
+
+            rulesMap[Ai] = result.first;
+
+            if (!result.second.empty()) {
+
+                rulesMap[AiPrime] = result.second;
+            }
+        }
+
+
+    }
+
+    vector<Rule> finalRules;
+    //for each A in sortedNT, I union them
+    for (auto &A : sortedNT) {
+        for (auto &r : rulesMap[A]) {
+            finalRules.push_back(r);
+        }
+    }
+
+    for (auto &p : rulesMap) {
+        // if p.first not in sortedNT => new non-terminal
+        if (find(sortedNT.begin(), sortedNT.end(), p.first) == sortedNT.end()) {
+            for (auto &r : p.second) {
+                finalRules.push_back(r);
+            }
+        }
+    }
+
+    return finalRules;
+}
+
+
+void printTask6Grammar(const vector<Rule> &finalGrammar)
+{
+    vector<Rule> sortedGrammar = finalGrammar;
+
+    sort(sortedGrammar.begin(), sortedGrammar.end(), isRuleBefore);
+
+    for (const Rule &r : sortedGrammar)
+    {
+        cout << r.LHS << " -> ";
+        if (r.RHS.empty())
+        {
+            //no symbols on the right-hand side => epsilon => print just "#"
+            cout << "#\n";
+        }
+        else
+        {
+            //printing each symbol in RHS separated by spaces
+            for (int i = 0; i < (int)r.RHS.size(); i++)
+            {
+                cout << r.RHS[i];
+                if (i < (int)r.RHS.size() - 1)
+                    cout << " ";
+            }
+
+            //ending each rule with " #"
+            cout << " #\n";
+        }
+    }
+}
+
+
+
+
+
+
 /*
  * Task 1:
  * Printing the terminals, then nonterminals of grammar in appearing order
@@ -1094,6 +1353,8 @@ void Task5()
 // Task 6: eliminate left recursion
 void Task6()
 {
+    vector<Rule> finalLeftGrammar = eliminateLeftRecursionAlgorithm();
+    printTask6Grammar(finalLeftGrammar);
 }
     
 int main (int argc, char* argv[])
