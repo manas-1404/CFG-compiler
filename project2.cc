@@ -1038,6 +1038,12 @@ vector<Rule> performLeftFactor() {
     //this vector contains the sorted grammar rules on basis of longest match and then lexically
     vector<Rule> grammarRules = findLongestMatchesAndSort(allRules);
 
+    map<string, int> mapOfNonTerminalandIndex;
+
+    for (auto nonTerminal : nonTerminalsSet) {
+        mapOfNonTerminalandIndex[nonTerminal] = 0;
+    }
+
     while (grammarRules.size() >= 2) {
 
         cout << "The grammarRule size is : " << grammarRules.size() << endl;
@@ -1055,6 +1061,12 @@ vector<Rule> performLeftFactor() {
         int maxCommonLength = getCommonPrefixLength(firstRule, grammarRules[1]);
 
         cout << "Max common length is : " << maxCommonLength << endl;
+        cout << "Rule 1: LHS: " << firstRule.LHS << " ->";
+        printRHS(firstRule.RHS);
+        cout << endl;
+        cout << "Rule 2: LHS: " << grammarRules[1].LHS << " ->";
+        printRHS(grammarRules[1].RHS);
+        cout << endl;
 
         if (maxCommonLength != 0) {
 
@@ -1072,7 +1084,7 @@ vector<Rule> performLeftFactor() {
             //add the 1st rule only after adding all the other common same prefix rules
             newRules.push_back(firstRule);
 
-            cout << "Added all the same common prefix rules into newRules";
+            cout << "Added all the same common prefix rules into newRules\n";
             printRules(newRules);
             cout << endl;
 
@@ -1092,17 +1104,27 @@ vector<Rule> performLeftFactor() {
                 }
             }
 
-            cout << ""
+            cout << "Adding non left factored rules into rulesWithoutLeftFactor\n";
+            printRules(rulesWithoutLeftFactor);
+            cout << endl;
 
             Rule factoredRule;
             factoredRule.LHS = firstRule.LHS;
             factoredRule.RHS = extractPrefix(firstRule, maxCommonLength);
 
-            string newNT = generateFactoredName(firstRule.LHS, nextFactorIndex++);
+            int currentIndexOfNonTerminal = mapOfNonTerminalandIndex[firstRule.LHS] + 1;
+
+            string newNT = generateFactoredName(firstRule.LHS, currentIndexOfNonTerminal);
+
+            mapOfNonTerminalandIndex[firstRule.LHS] = currentIndexOfNonTerminal;
 
             factoredRule.RHS.push_back(newNT);
 
             rulesWithoutLeftFactor.push_back(factoredRule);
+
+            cout << "After Adding all non left factored rules into rulesWithoutLeftFactor\n";
+            printRules(rulesWithoutLeftFactor);
+            cout << endl;
 
             for (int k = 0; k < newRules.size(); k++) {
                 Rule newRule;
@@ -1114,9 +1136,23 @@ vector<Rule> performLeftFactor() {
 
             grammarRules = rulesWithoutLeftFactor;
 
+            cout << "At the end of the if condition while loop\n";
+
+            cout << "Printing rulesWithoutLeftFactor\n";
+            printRules(rulesWithoutLeftFactor);
+
+            cout << "finalResultGrammar:\n";
+            printRules(finalResultGrammar);
+
         }
 
         else {
+
+            cout << "there is no common sequence, so going to else block\n";
+
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Printing gramarRules:\n";
+            printRules(grammarRules);
 
             for (int i = 0; i < grammarRules.size(); i++) {
 
@@ -1125,13 +1161,25 @@ vector<Rule> performLeftFactor() {
                 }else {
                     remainingGrammar.push_back(grammarRules[i]);
                 }
-
             }
+
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Printing remainingGrammar:\n";
+            printRules(remainingGrammar);
+
 
             grammarRules = remainingGrammar;
 
         }
     }
+
+    if (grammarRules.size() == 1) {
+        finalResultGrammar.push_back(grammarRules[0]);
+    }
+
+    cout << "---------------------------\n";
+    cout << "Final results without\n";
+    printRules(finalResultGrammar);
 
     return finalResultGrammar;
 }
@@ -1204,6 +1252,7 @@ void Task4()
 void Task5()
 {
     vector<Rule> finalFactoredGrammar = performLeftFactor();
+    cout << "----------------------\n";
     printTask5Grammar(finalFactoredGrammar);
 }
 
