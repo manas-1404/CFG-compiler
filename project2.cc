@@ -632,92 +632,157 @@ void printFollowSets() {
 }
 
 
+//method which will return true if the Rule R1 is before Rule R2 in dictionary order, else it will return false
 bool isRuleBefore(Rule r1, Rule r2) {
 
+    //declaring 2 vectors to store the sequence of symbols in the rules
+    // initializing ghem with the LHS of both the rules
     vector<string> seq1 = {r1.LHS};
     vector<string> seq2 = {r2.LHS};
 
+    //appending the entire RHS of the rules R1 and R2 into the seq1 and seq2 vectors
     seq1.insert(seq1.end(), r1.RHS.begin(), r1.RHS.end());
     seq2.insert(seq2.end(), r2.RHS.begin(), r2.RHS.end());
 
+    //calculating the minimum length of the 2 sequences, because we can only travserse till the minimum length of both the rules
     int len = min(seq1.size(), seq2.size());
+
+    //looping through the minimum length
     for (int i = 0; i < len; i++) {
+
+        //check if the seq1 symbol is less than seq2 symbol
         if (seq1[i] < seq2[i]) {
+
+            //returning true because seq1 symbol is less than seq2 symbol
             return true;
-        } else if (seq1[i] > seq2[i]) {
+        }
+
+        //check if the seq1 symbol is greater than seq2 symbol
+        else if (seq1[i] > seq2[i]) {
+
+            //returning false because seq1 symbol is greater than seq2 symbol
             return false;
         }
     }
 
+    //if the Rules are equal up to the shorter one, then shorter rule comes first
     return seq1.size() < seq2.size();
 }
 
 
+//method whichi will return the length of the common prefixes by comparing the RHS of the rule R1 and R2
 int getCommonPrefixLength(Rule r1, Rule r2) {
-    // Only compare if LHS is the same
-    if (r1.LHS != r2.LHS) return 0;
 
+    //comparing if LHS is the same in both the rules
+    if (r1.LHS != r2.LHS) {
+
+        //return 0 because there is no common prefix if the rules have different LHS
+        return 0;
+    }
+
+    //calculating the minimumm of the rhs size of both the rules
     int len = min(r1.RHS.size(), r2.RHS.size());
+
+    //initializing the count of common prefix to 0
     int count = 0;
 
+    //traversing through the RHS of the minimum length and comparing the symbols
     for (int i = 0; i < len; i++) {
+
+        //checking if the RHS symbols are the same in both the rules
         if (r1.RHS[i] == r2.RHS[i]) {
+
+            //incrementing the count of common prefix
             count++;
         } else {
+
+            //the symbols are no longer the same, so i am breaking the for loop
             break;
         }
     }
 
+    //returning the count of common prefix
     return count;
 }
 
+
+//method which will compare the Rules based on the longestMatch of common prefix and then lexically
 bool compareRuleLongMatch(RuleWithLongestMatch &a, RuleWithLongestMatch &b) {
-    //first compare descending longestMatch
+
+    //first comparing if the longestMatch of 2 rules is not same
     if (a.longestMatch != b.longestMatch) {
+
+        //returning true if the longestMatch of a is greater than b, else false
         return a.longestMatch > b.longestMatch;
     }
 
-    //then compare lex order by your existing utility isRuleBefore(r1, r2)
+    //then compare lexically which rule comes first using the isRuleBefore function, which will return true if a is before b, else false
     return isRuleBefore(a.rule, b.rule);
 }
 
 
+//method to find the longest matches of the rules in the grammar, then later sort is 1st on longestMatch and then lexically
 vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
-    //creating a local vector of (longestMatch, Rule)
+
+    //creating a temp vector of struct (longestMatch, Rule)
     vector<RuleWithLongestMatch> temp;
 
-    //for each rule, find the maximum prefix length with any other rule having same LHS
+
+    //the outer loop is used to take the Rule 1 and then compare it with the other rules one by one in the inner loop
+    //looping through to find the maximum prefix length with any other rule having same the LHS
     for (int i = 0; i < grammar.size(); i++) {
+
+        //initializing the maxLen to 0
         int maxLen = 0;
-        // Only compare with rules that share the same LHS
+
+        //using the inner loop to traverse through the grammar and compare the Rule 1 with all the other rules
         for (int j = 0; j < grammar.size(); j++) {
+
+            //if i am comparing the same rule, then i will skip the comparison
             if (i == j) {
+
+                //skipping the comparison
                 continue;
             }
 
+            //comparing only if the LHS of the both the Rule 1 (outer loop) and Rule j (inner loop) is the same
             if (grammar[i].LHS == grammar[j].LHS) {
 
-
+                //getting the length of the common prefix of the RHS of Rule 1 and Rule j of the grammar
                 int len = getCommonPrefixLength(grammar[i], grammar[j]);
+
+                //if the length of the common prefix is greater than the maxLen, then I will update the maxLen because i found a new maxiumum
                 if (len > maxLen) {
+
+                    //updating the maxLen
                     maxLen = len;
                 }
             }
         }
 
-        //storing the result
+        //storing the results of the comparison between Rule 1 and Rule j in a new struct
         RuleWithLongestMatch rlm;
+
+        //storing the maxLen and the Rule 1 in the struct
         rlm.longestMatch = maxLen;
         rlm.rule = grammar[i];
+
+        //appending the struct to the temp vector
         temp.push_back(rlm);
     }
 
-    //sorting temp using our named compare function
+    //now i will start the sorting of the rules based on longestMatch and then lexically
+
+    //sorting temp using the compare function which will compare the rules based on the longestMatch and then lexically
     sort(temp.begin(), temp.end(), compareRuleLongMatch);
 
-    //building the sorted grammar
+    //declaring a new vector of Rules to store the sorted grammar
     vector<Rule> sortedGrammar;
+
+    //traversing through the temp vector and appending the rules to the sortedGrammar vector
     for (auto &item : temp) {
+
+        //appending the rule to the sortedGrammar vector
         sortedGrammar.push_back(item.rule);
     }
 
@@ -725,38 +790,57 @@ vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
     return sortedGrammar;
 }
 
-static int nextFactorIndex = 1; // e.g. used to generate "A1", "A2", etc. across multiple runs
 
-// helper: returns e.g. "A1" or "A2" for an LHS "A"
+//method which will returns the nezt non-terminal name during left factoring, A1 or A2 for an LHS A
 string generateFactoredName(const string &lhs, int count) {
-    // e.g. "A" + to_string(count) => "A1", "A2"
+
+    //concatenating the LHS with the count string,  A + to_string(count) => A1, A2
     return lhs + to_string(count);
 }
 
-// extractPrefix(r, length) => returns first 'length' symbols of r.RHS
+
+//method which will return the prefix of a Rule till the length given
 vector<string> extractPrefix(const Rule &r, int length) {
+
+    //declaring a vector to store the result
     vector<string> result;
-    for (int i = 0; i < length && i < (int)r.RHS.size(); i++) {
+
+    //traversing through the exact prefix length
+    for (int i = 0; i < length && i < r.RHS.size(); i++) {
+
+        //appending the symbol to the result vector
         result.push_back(r.RHS[i]);
     }
+
+    //returning the result vector
     return result;
 }
 
-// extractAllButPrefixOfSize(r, length) => returns RHS after skipping 'length' symbols
+
+//method which will return a next part after a certain lenght of the RHS of a Rule
 vector<string> extractAllButPrefixOfSize(const Rule &r, int length) {
+
+    //declaring a vector to store the result
     vector<string> result;
-    for (int i = length; i < (int)r.RHS.size(); i++) {
+
+    //traversing through the i = length till the end of the RHS of the given Rule
+    for (int i = length; i < r.RHS.size(); i++) {
+
+        //appending the symbol to the result vector
         result.push_back(r.RHS[i]);
     }
+
+    //returning the result vector
     return result;
 }
 
+//method to print the rules
 void printRules(const vector<Rule>& rules) {
     for (const Rule& rule : rules) {
         cout << rule.LHS << " -> ";
 
         if (rule.RHS.empty()) {
-            cout << "#"; // Using "#" to denote epsilon
+            cout << "*";
         } else {
             for (size_t i = 0; i < rule.RHS.size(); ++i) {
                 cout << rule.RHS[i];
@@ -770,10 +854,10 @@ void printRules(const vector<Rule>& rules) {
     }
 }
 
-
+//method to print the RHS of the rules
 void printRHS(const vector<string>& rhs) {
     if (rhs.empty()) {
-        cout << "#";
+        cout << "*";
         return;
     }
 
@@ -785,31 +869,47 @@ void printRHS(const vector<string>& rhs) {
     }
 }
 
+
+//method whcih will return true if the 2 rules are equal, else false
 bool areRulesEqual(const Rule &r1, const Rule &r2) {
 
+    //checking if the LHS of both the rules are the same
+    if (r1.LHS != r2.LHS) {
 
-    if (r1.LHS != r2.LHS) return false;
+        //returning false because the LHS of both rules are not the same
+        return false;
+    }
 
-    // Then compare RHS lengths
-    if (r1.RHS.size() != r2.RHS.size()) return false;
+    //checking if the RHS size of both the rules are the same
+    if (r1.RHS.size() != r2.RHS.size()) {
 
-    // Finally compare each symbol in the RHS
-    for (int i = 0; i < (int)r1.RHS.size(); i++) {
+        //returning false because the RHS size of both rules are not the same
+        return false;
+    }
+
+    //checking if each and every element of the RHS of both the rules are the same
+    for (int i = 0; i < r1.RHS.size(); i++) {
+
+        //checking if the current RHS symbol are the same in both the rules
         if (r1.RHS[i] != r2.RHS[i]) {
+
+            //returning false because the RHS symbol of both rules are not the same
             return false;
         }
     }
+
+    //nothing went wrong, meaning till now everything is the same in both the rules
+    //so returning true
     return true;
 }
+
 
 vector<Rule> performLeftFactor() {
 
     //this vector is used to store the new rules like A -> B C D, A -> B C E, A -> B C F, A -> B C G
     vector<Rule> newRules;
 
-    //this vector is used to store the rules which are left factored
-    vector<Rule> leftFactoredRules;
-
+    //this vector is used to keep track of the rules without the left factored rules
     vector<Rule> rulesWithoutLeftFactor;
 
     //using this vector to store the remaining grammar and later equating it to the grammarRules
