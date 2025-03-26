@@ -300,6 +300,34 @@ void removeDuplicates(vector<string>& vec) {
     vec = result;
 }
 
+string ruleToString(Rule &rule) {
+    string result = rule.LHS + "->";
+    for (int i = 0; i < rule.RHS.size(); i++) {
+        result += rule.RHS[i];
+        if (i < rule.RHS.size() - 1) {
+            result += " ";
+        }
+    }
+    return result;
+}
+
+vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
+    unordered_set<string> seen;
+    vector<Rule> result;
+
+    for (int i = 0; i < rules.size(); i++) {
+        string key = ruleToString(rules[i]);
+
+        if (seen.find(key) == seen.end()) {
+            result.push_back(rules[i]);
+            seen.insert(key);
+        }
+    }
+
+    return result;
+}
+
+
 
 bool isNonTerminal(const string &symbol) {
     return nonTerminalsSet.find(symbol) != nonTerminalsSet.end();
@@ -743,96 +771,200 @@ void printRules(const vector<Rule>& rules) {
 }
 
 
-// performs the entire left factoring process
-vector<Rule> performLeftFactoring(vector<Rule> grammar) {
+void printRHS(const vector<string>& rhs) {
+    if (rhs.empty()) {
+        cout << "#";
+        return;
+    }
 
-    vector<Rule> newGrammar;
-
-    bool done = false;
-    while (!done) {
-
-        vector<Rule> sorted = findLongestMatchesAndSort(grammar);
-
-        // printRules(sorted);
-
-        if (sorted.empty()) {
-
-            break;
+    for (size_t i = 0; i < rhs.size(); ++i) {
+        cout << rhs[i];
+        if (i < rhs.size() - 1) {
+            cout << " ";
         }
+    }
+}
 
-        int maxLen = 0;
-        Rule topRule = sorted[0];
-        for (auto &r : grammar) {
-            if (r.LHS == topRule.LHS && &r != &topRule) {
-                int len = getCommonPrefixLength(topRule, r);
-                if (len > maxLen) {
-                    maxLen = len;
-                }
-            }
+bool areRulesEqual(const Rule &r1, const Rule &r2) {
+
+
+    if (r1.LHS != r2.LHS) return false;
+
+    // Then compare RHS lengths
+    if (r1.RHS.size() != r2.RHS.size()) return false;
+
+    // Finally compare each symbol in the RHS
+    for (int i = 0; i < (int)r1.RHS.size(); i++) {
+        if (r1.RHS[i] != r2.RHS[i]) {
+            return false;
         }
+    }
+    return true;
+}
 
-        if (maxLen == 0 || maxLen == topRule.RHS.size()) {
+vector<Rule> performLeftFactor() {
 
-            sort(grammar.begin(), grammar.end(), isRuleBefore);
+    //this vector is used to store the new rules like A -> B C D, A -> B C E, A -> B C F, A -> B C G
+    vector<Rule> newRules;
+
+    //this vector is used to store the rules which are left factored
+    vector<Rule> leftFactoredRules;
+
+    vector<Rule> rulesWithoutLeftFactor;
+
+    //using this vector to store the remaining grammar and later equating it to the grammarRules
+    vector<Rule> remainingGrammar;
+
+    //this vector is used to return the final results
+    vector<Rule> finalResultGrammar;
+
+    //this vector contains the sorted grammar rules on basis of longest match and then lexically
+    vector<Rule> grammarRules = findLongestMatchesAndSort(allRules);
+
+    map<string, int> mapOfNonTerminalandIndex;
+
+    for (auto nonTerminal : nonTerminalsSet) {
+        mapOfNonTerminalandIndex[nonTerminal] = 0;
+    }
 
 
-            for (auto &r : grammar) {
-                newGrammar.push_back(r);
-            }
-            grammar.clear();
-            done = true;
-            continue;
-        } else {
+    while (grammarRules.size() >= 2) {
 
-            vector<string> thePrefix = extractPrefix(topRule, maxLen);
+        // cout << "The grammarRule size is : " << grammarRules.size() << endl;
 
-            string newNt = generateFactoredName(topRule.LHS, nextFactorIndex++);
+        newRules.clear();
+        rulesWithoutLeftFactor.clear();
+        remainingGrammar.clear();
 
-            vector<Rule> sharedPrefixRules;
+        // cout << "-------------------------\n";
+        // printRules(grammarRules);
+        // cout << endl;
 
+        Rule firstRule = grammarRules[0];
 
-            vector<Rule> keepInGrammar;
+        int maxCommonLength = getCommonPrefixLength(firstRule, grammarRules[1]);
 
-            for (auto &r : grammar) {
-                if (r.LHS == topRule.LHS) {
+        // cout << "Max common length is : " << maxCommonLength << endl;
+        // cout << "Rule 1: LHS: " << firstRule.LHS << " ->";
+        // printRHS(firstRule.RHS);
+        // cout << endl;
+        // cout << "Rule 2: LHS: " << grammarRules[1].LHS << " ->";
+        // printRHS(grammarRules[1].RHS);
+        // cout << endl;
 
-                    int len = getCommonPrefixLength(r, topRule);
-                    if (len == maxLen) {
+        if (maxCommonLength != 0) {
 
-                        sharedPrefixRules.push_back(r);
-                    } else {
-                        keepInGrammar.push_back(r);
+            for (int i = 1; i < grammarRules.size(); i++) {
+
+                if (firstRule.LHS == grammarRules[i].LHS) {
+                    int commonLength = getCommonPrefixLength(firstRule, grammarRules[i]);
+
+                    if (maxCommonLength == commonLength) {
+                        newRules.push_back(grammarRules[i]);
                     }
-                } else {
-                    keepInGrammar.push_back(r);
                 }
             }
 
+            //add the 1st rule only after adding all the other common same prefix rules
+            newRules.push_back(firstRule);
+
+            // cout << "Added all the same common prefix rules into newRules\n";
+            // printRules(newRules);
+            // cout << endl;
+
+            //removing the rules of A -> alpha X from the grammarRules
+            for (int i = 0; i < grammarRules.size(); i++) {
+                bool isMatch = false;
+
+                for (int j = 0; j < newRules.size(); j++) {
+                    if (areRulesEqual(grammarRules[i], newRules[j])) {
+                        isMatch = true;
+                        break;
+                    }
+                }
+
+                if (!isMatch) {
+                    rulesWithoutLeftFactor.push_back(grammarRules[i]);
+                }
+            }
+
+            // cout << "Adding non left factored rules into rulesWithoutLeftFactor\n";
+            // printRules(rulesWithoutLeftFactor);
+            // cout << endl;
 
             Rule factoredRule;
-            factoredRule.LHS = topRule.LHS;
-            factoredRule.RHS = thePrefix;
-            factoredRule.RHS.push_back(newNt);
+            factoredRule.LHS = firstRule.LHS;
+            factoredRule.RHS = extractPrefix(firstRule, maxCommonLength);
 
-            keepInGrammar.push_back(factoredRule);
+            int currentIndexOfNonTerminal = mapOfNonTerminalandIndex[firstRule.LHS] + 1;
 
-            for (auto &r : sharedPrefixRules) {
-                Rule newNtRule;
-                newNtRule.LHS = newNt;
+            string newNT = generateFactoredName(firstRule.LHS, currentIndexOfNonTerminal);
 
-                newNtRule.RHS = extractAllButPrefixOfSize(r, maxLen);
+            mapOfNonTerminalandIndex[firstRule.LHS] = currentIndexOfNonTerminal;
 
-                newGrammar.push_back(newNtRule);
+            factoredRule.RHS.push_back(newNT);
+
+            rulesWithoutLeftFactor.push_back(factoredRule);
+
+            // cout << "After Adding all non left factored rules into rulesWithoutLeftFactor\n";
+            // printRules(rulesWithoutLeftFactor);
+            // cout << endl;
+
+            for (int k = 0; k < newRules.size(); k++) {
+                Rule newRule;
+                newRule.LHS = newNT;
+                newRule.RHS = extractAllButPrefixOfSize(newRules[k], maxCommonLength);
+
+                finalResultGrammar.push_back(newRule);
             }
 
-            grammar = keepInGrammar;
+            grammarRules = findLongestMatchesAndSort(rulesWithoutLeftFactor);
+
+            // cout << "At the end of the if condition while loop\n";
+            // cout << "Printing rulesWithoutLeftFactor\n";
+            // printRules(rulesWithoutLeftFactor);
+            // cout << "finalResultGrammar:\n";
+            // printRules(finalResultGrammar);
+
+        }
+
+        else {
+
+            // cout << "there is no common sequence, so going to else block\n";
+            // cout << "~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            // cout << "Printing gramarRules:\n";
+            // printRules(grammarRules);
+
+            for (int i = 0; i < grammarRules.size(); i++) {
+
+                if (firstRule.LHS == grammarRules[i].LHS) {
+                    finalResultGrammar.push_back(grammarRules[i]);
+                }else {
+                    remainingGrammar.push_back(grammarRules[i]);
+                }
+            }
+
+            // cout << "~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            // cout << "Printing remainingGrammar:\n";
+            // printRules(remainingGrammar);
+
+
+            grammarRules = remainingGrammar;
+
         }
     }
 
-    sort(newGrammar.begin(), newGrammar.end(), isRuleBefore);
+    if (grammarRules.size() == 1) {
+        finalResultGrammar.push_back(grammarRules[0]);
+    }
 
-    return newGrammar;
+    // cout << "---------------------------\n";
+    // cout << "Final results without\n";
+    // printRules(finalResultGrammar);
+
+    return finalResultGrammar;
 }
+
 
 
 void printTask5Grammar(const vector<Rule> &factoredGrammar) {
@@ -863,8 +995,8 @@ void printTask5Grammar(const vector<Rule> &factoredGrammar) {
 }
 
 
-/* 
- * Task 1: 
+/*
+ * Task 1:
  * Printing the terminals, then nonterminals of grammar in appearing order
  * output is one line, and all names are space delineated
 */
@@ -900,7 +1032,8 @@ void Task4()
 // Task 5: left factoring
 void Task5()
 {
-    vector<Rule> finalFactoredGrammar = performLeftFactoring(allRules);
+    vector<Rule> finalFactoredGrammar = performLeftFactor();
+    // cout << "----------------------\n";
     printTask5Grammar(finalFactoredGrammar);
 }
 
@@ -965,7 +1098,8 @@ int main (int argc, char* argv[])
             Task4();
             break;
 
-        case 5: Task5();
+        case 5:
+            Task5();
             break;
         
         case 6: Task6();
