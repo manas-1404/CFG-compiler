@@ -918,7 +918,7 @@ vector<Rule> performLeftFactor() {
                 finalResultGrammar.push_back(newRule);
             }
 
-            grammarRules = rulesWithoutLeftFactor;
+            grammarRules = findLongestMatchesAndSort(rulesWithoutLeftFactor);
 
             // cout << "At the end of the if condition while loop\n";
             // cout << "Printing rulesWithoutLeftFactor\n";
