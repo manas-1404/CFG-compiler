@@ -316,7 +316,7 @@ void ReadGrammar() {
 
 //utility function to remove duplicates from a vector of strings
 //i used it to remove the duplicates from the universe vector
-void removeDuplicates(vector<string>& vec) {
+void removeDuplicatesFromStringVector(vector<string>& stringVector) {
 
     //declaring a set to store the seen strings
     unordered_set<string> seenStrings;
@@ -325,21 +325,21 @@ void removeDuplicates(vector<string>& vec) {
     vector<string> result;
 
     //looping through the vector using a for loop with indexes
-    for (size_t i = 0; i < vec.size(); ++i) {
+    for (size_t i = 0; i < stringVector.size(); ++i) {
 
         //if the element is not in the set, then add it to the result and mark it as seen
-        if (seenStrings.find(vec[i]) == seenStrings.end()) {
+        if (seenStrings.find(stringVector[i]) == seenStrings.end()) {
 
             //pushing the element to the result vector
-            result.push_back(vec[i]);
+            result.push_back(stringVector[i]);
 
             //marking the element as seen
-            seenStrings.insert(vec[i]);
+            seenStrings.insert(stringVector[i]);
         }
     }
 
     //assigning the result vector to the original vector
-    vec = result;
+    stringVector = result;
 }
 
 //utility function which is used to convert the rules into a string
@@ -367,7 +367,7 @@ string ruleToString(Rule &rule) {
 }
 
 //utility function which is used to remove the duplicate rules from the vector of rules
-//i used this function while debugging task5, now simply thought of keeping it in the code XD
+//i used this function while debugging, now simply thought of keeping it in the code XD
 vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
 
     //declaring a set to store the seen rules
@@ -1901,7 +1901,7 @@ int main (int argc, char* argv[])
                     // and represent it internally in data structures
                     // ad described in project 2 presentation file
 
-    removeDuplicates(universe);
+    removeDuplicatesFromStringVector(universe);
 
     //start calculating all the important sets right now and store them in the global sets
     getNonTerminals();
