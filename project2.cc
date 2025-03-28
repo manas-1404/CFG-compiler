@@ -399,7 +399,7 @@ vector<Rule> removeDuplicateRules(vector<Rule> &rules) {
 
 
 //method which is used to check if a symbol is a non-terminal or not
-bool isNonTerminal(const string &symbol) {
+bool isNonTerminal(string symbol) {
 
     //checking if the symbol is in the non-terminals set
     if (nonTerminalsSet.find(symbol) != nonTerminalsSet.end()) {
@@ -630,8 +630,8 @@ void printFirstSets() {
 void calculateFirstSets() {
 
     //initialize each non-terminal's FIRST set to be empty
-    for (auto &nt : nonTerminalsSet) {
-        firstsSetHashMap[nt].clear();
+    for (string currentNonTerminal : nonTerminalsSet) {
+        firstsSetHashMap[currentNonTerminal].clear();
     }
 
     //initializing the updated flag to true
@@ -705,7 +705,7 @@ void calculateFirstSets() {
                     int oldSize = firstsSetHashMap[currentLHS].size();
 
                     //inserting FIRST(currentLetter) - "epsilon" into FIRST(currentLHS)
-                    for (auto &index : firstsSetHashMap[currentLetter]) {
+                    for (string index : firstsSetHashMap[currentLetter]) {
 
                         //checking if the symbol is epsilon or not
                         if (index != "epsilon") {
@@ -755,13 +755,13 @@ void calculateFirstSets() {
 
 
 //method which is used to insert the elements from the set small to the set big, it returns true if the set big is changed, else it returns false
-bool unionInsert(set<string> &smallSet, const set<string> &bigSet) {
+bool unionInsert(set<string> &smallSet, set<string> &bigSet) {
 
     //initializing a flag didSetChange to false
     bool didSetChange = false;
 
     //looping through the bigSet
-    for (auto &element : bigSet) {
+    for (string element : bigSet) {
 
         //if the element is not in the smallSet, then insert it and mark didSetChange as true
         if (smallSet.find(element) == smallSet.end()) {
@@ -1032,7 +1032,7 @@ bool compareRuleLongMatch(RuleWithLongestMatch &a, RuleWithLongestMatch &b) {
 
 
 //method to find the longest matches of the rules in the grammar, then later sort is 1st on longestMatch and then lexically
-vector<Rule> findLongestMatchesAndSort(vector<Rule> &grammar) {
+vector<Rule> findLongestCommonMatchesAndSort(vector<Rule> &grammar) {
 
     //creating a temp vector of struct (longestMatch, Rule)
     vector<RuleWithLongestMatch> temp;
@@ -1175,7 +1175,7 @@ void printRules(vector<Rule>& rules) {
 
 //debuggninf method to print the RHS of the rules
 //i used it while debugging, now simply thought of keeping it in the code XD
-void printRHS(const vector<string>& RuleRHS) {
+void printRHS(vector<string>& RuleRHS) {
     if (RuleRHS.empty()) {
         cout << "*";
         return;
@@ -1239,14 +1239,14 @@ vector<Rule> performLeftFactor() {
     vector<Rule> finalResultGrammar;
 
     //this vector contains the sorted grammar rules on basis of longest match and then lexically
-    vector<Rule> grammarRules = findLongestMatchesAndSort(allRules);
+    vector<Rule> grammarRules = findLongestCommonMatchesAndSort(allRules);
 
     //declaring a map to store the index of a particular non-terminal
     //like for A it is A1, A2, A3. so for B it is B1, B2, B3
     map<string, int> mapOfNonTerminalandIndex;
 
     //initializing the index of all the non-terminals to 0
-    for (auto nonTerminal : nonTerminalsSet) {
+    for (string nonTerminal : nonTerminalsSet) {
 
         //setting the index of the non-terminal to 0
         mapOfNonTerminalandIndex[nonTerminal] = 0;
@@ -1364,7 +1364,7 @@ vector<Rule> performLeftFactor() {
             }
 
             //updating the grammarRules to the sorted rulesWithoutLeftFactor
-            grammarRules = findLongestMatchesAndSort(rulesWithoutLeftFactor);
+            grammarRules = findLongestCommonMatchesAndSort(rulesWithoutLeftFactor);
 
         }
 
@@ -1456,55 +1456,8 @@ void printTask5Grammar(vector<Rule> &factoredGrammar) {
     }
 }
 
-//method which is used to get the Rules for a given non-terminal
-vector<Rule> getRulesForNonTerminal(string &nonTerminal, vector<Rule> &grammar) {
-
-    //declaring a vector to store the result
-    vector<Rule> result;
-
-    for (Rule &rule : grammar) {
-        if (rule.LHS == nonTerminal) {
-            result.push_back(rule);
-        }
-    }
-
-    return result;
-}
-
-
-//expanding a rule A -> B R using all the rules of B.
-vector<Rule> expandRulesForNonterminal(const string &A, const vector<Rule> &bRules,const vector<string> &suffixR){
-
-    vector<Rule> result;
-
-    //for each rule of B: B -> something (calling it Ri)
-    //building a new rule A -> (Ri followed by R)
-    for (const Rule &ruleB : bRules)
-    {
-        // ruleB.RHS is the sequence for that production of B
-        Rule newRule;
-        newRule.LHS = A;
-
-        //copying all symbols from ruleB.RHS
-        for (const string &symbol : ruleB.RHS) {
-            newRule.RHS.push_back(symbol);
-        }
-
-        //appending the suffix R at the end
-        for (const string &symbol : suffixR) {
-            newRule.RHS.push_back(symbol);
-        }
-
-        //finaly i get the rule,  A -> ruleB.RHS + suffixR
-        result.push_back(newRule);
-    }
-
-    return result;
-}
-
-
 //method which will separate left recursive and non leftrecursive rules for a given non-terminal
-pair<vector<Rule>, vector<Rule>> splitLeftRecursiveRules(string nonTerminal, vector<Rule> &rulesToSeparate){
+pair<vector<Rule>, vector<Rule>> splitGrammarIntoLRandNLRRules(string nonTerminal, vector<Rule> &rulesToSeparate){
 
     //declaring 2 vectors to store the left recursive and non left recursive rules
     vector<Rule> leftRecursiveRule;
@@ -1549,7 +1502,7 @@ pair<vector<Rule>, vector<Rule>> splitLeftRecursiveRules(string nonTerminal, vec
 }
 
 //method which will eliminate the immediate left recursion for a given non-terminal
-pair<vector<Rule>, vector<Rule>> eliminateImmediateLeftRecursion(vector<Rule> &leftRecurRules, vector<Rule> &nonLeftRecurRules, string &nonTerminal, string &nonTerminal2)
+pair<vector<Rule>, vector<Rule>> removeImmediateLRinGrammar(vector<Rule> &leftRecurRules, vector<Rule> &nonLeftRecurRules, string &nonTerminal, string &nonTerminal2)
 {
     //if there are no leftrecursive rules, then no change is needed
     if (leftRecurRules.empty()) {
@@ -1640,10 +1593,10 @@ vector<Rule> eliminateLeftRecursionAlgorithm()
     vector<string> sortedNonTerminal;
 
     //looping through the nonTerminalsSet to store the sorted non-terminals
-    for (string nt : nonTerminalsSet) {
+    for (string currentNonTerminal : nonTerminalsSet) {
 
         //appending the non-terminal to the sortedNonTerminal vector
-        sortedNonTerminal.push_back(nt);
+        sortedNonTerminal.push_back(currentNonTerminal);
     }
 
     //sorting the sortedNonTerminal vector
@@ -1752,7 +1705,7 @@ vector<Rule> eliminateLeftRecursionAlgorithm()
         vector<Rule> currentRulesVector = rulesMap[currentNonTerminal];
 
         //splitting the left recursive and non left recursive rules
-        pair<vector<Rule>, vector<Rule>> splitted = splitLeftRecursiveRules(currentNonTerminal, currentRulesVector);
+        pair<vector<Rule>, vector<Rule>> splitted = splitGrammarIntoLRandNLRRules(currentNonTerminal, currentRulesVector);
 
         //storing the left recursive rules in a vector
         vector<Rule> leftRecurRule = splitted.first;
@@ -1773,7 +1726,7 @@ vector<Rule> eliminateLeftRecursionAlgorithm()
             string newNonTerminalName = makeUpNewFactorName(currentNonTerminal, indexCount);
 
             //eliminating the immediate left recursion
-            pair<vector<Rule>, vector<Rule>> resultPair = eliminateImmediateLeftRecursion( leftRecurRule, nonRecurRule, currentNonTerminal, newNonTerminalName);
+            pair<vector<Rule>, vector<Rule>> resultPair = removeImmediateLRinGrammar( leftRecurRule, nonRecurRule, currentNonTerminal, newNonTerminalName);
 
             //storing the new rules for the current non-terminal in rulesMap
             rulesMap[currentNonTerminal] = resultPair.first;
@@ -1941,7 +1894,9 @@ int main (int argc, char* argv[])
 
     //starting the parsing of the grammar
     parser.startParsing();
-    
+
+    //i did not use the read grammar function because i was failing the syntax checking test cases
+    //instead i directly start parsing the grammar
     //ReadGrammar();  // Reads the input grammar from standard input
                     // and represent it internally in data structures
                     // ad described in project 2 presentation file
